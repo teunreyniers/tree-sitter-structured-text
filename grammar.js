@@ -184,7 +184,28 @@ export default grammar({
         ";"
       ),
 
-    type_name: ($) => $.identifier,
+    type_name: ($) => choice(
+      $.array_type,
+      $.identifier
+    ),
+
+    array_type: ($) =>
+      seq(
+        caseInsensitive("array"),
+        "[",
+        field("range", $.array_range),
+        repeat(seq(",", field("range", $.array_range))),
+        "]",
+        caseInsensitive("of"),
+        field("element_type", $.type_name)
+      ),
+
+    array_range: ($) =>
+      seq(
+        field("start", choice($.integer_literal, $.identifier)),
+        "..",
+        field("end", choice($.integer_literal, $.identifier))
+      ),
 
     // Expression
     _expression: ($) =>

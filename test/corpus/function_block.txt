@@ -153,3 +153,59 @@ END_FUNCTION
         expression: (type_conversion
           type: (conversion_type)
           value: (integer_literal))))))
+
+==================
+Array variable declarations
+==================
+
+FUNCTION_BLOCK test_arrays
+VAR
+	_step_start_time : UDINT;
+	_loop_count: ARRAY [0..MAX_LOOPS] OF UINT;
+	_loop_time:  ARRAY [0..MAX_LOOPS] OF TIME;
+	_loop_start: ARRAY [0..MAX_LOOPS] OF INT;
+	_loop_counter: ARRAY [0..MAX_LOOPS] OF UINT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (identifier))
+            element_type: (type_name (identifier)))))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (identifier))
+            element_type: (type_name (identifier)))))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (identifier))
+            element_type: (type_name (identifier)))))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (identifier))
+            element_type: (type_name (identifier))))))))
