@@ -115,7 +115,8 @@ export default grammar({
         $.var_temp,
         $.var_static,
         $.var_global,
-        $.var_external
+        $.var_external,
+        $.var_constant
       ),
 
     var_input: ($) =>
@@ -174,9 +175,17 @@ export default grammar({
         caseInsensitive("end_var")
       ),
 
+    var_constant: ($) =>
+      seq(
+        caseInsensitive("var"),
+        caseInsensitive("constant"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
     variable_declaration: ($) =>
       seq(
-        optional($.comment),
+        repeat(choice($.comment, $.pragma)),
         field("name", $.identifier),
         ":",
         field("type", $.type_name),
@@ -221,6 +230,7 @@ export default grammar({
         $.function_call,
         $.float_literal,
         $.integer_literal,
+        $.time_literal,
         $.true,
         $.false,
         $.type_conversion
@@ -361,6 +371,49 @@ export default grammar({
     },
 
     string_literal: ($) => seq("'", /[^']*/, "'"),
+
+    time_literal: (_) => {
+      const digits = repeat1(/[0-9]/);
+      const decimal_digits = seq(digits, optional(seq(".", digits)));
+      
+      return token(
+        seq(
+          /[tT]#/,
+          choice(
+            // Milliseconds as smallest unit
+            seq(decimal_digits, /[mM][sS]/),
+            // Seconds + milliseconds as smallest unit
+            seq(digits, /[sS]/, decimal_digits, /[mM][sS]/),
+            // Seconds as smallest unit
+            seq(decimal_digits, /[sS]/),
+            // Minutes + seconds + milliseconds as smallest unit
+            seq(digits, /[mM]/, digits, /[sS]/, decimal_digits, /[mM][sS]/),
+            // Minutes + seconds as smallest unit
+            seq(digits, /[mM]/, decimal_digits, /[sS]/),
+            // Minutes as smallest unit
+            seq(decimal_digits, /[mM]/),
+            // Hours + minutes + seconds + milliseconds as smallest unit
+            seq(digits, /[hH]/, digits, /[mM]/, digits, /[sS]/, decimal_digits, /[mM][sS]/),
+            // Hours + minutes + seconds as smallest unit
+            seq(digits, /[hH]/, digits, /[mM]/, decimal_digits, /[sS]/),
+            // Hours + minutes as smallest unit
+            seq(digits, /[hH]/, decimal_digits, /[mM]/),
+            // Hours as smallest unit
+            seq(decimal_digits, /[hH]/),
+            // Days + hours + minutes + seconds + milliseconds as smallest unit
+            seq(digits, /[dD]/, digits, /[hH]/, digits, /[mM]/, digits, /[sS]/, decimal_digits, /[mM][sS]/),
+            // Days + hours + minutes + seconds as smallest unit
+            seq(digits, /[dD]/, digits, /[hH]/, digits, /[mM]/, decimal_digits, /[sS]/),
+            // Days + hours + minutes as smallest unit
+            seq(digits, /[dD]/, digits, /[hH]/, decimal_digits, /[mM]/),
+            // Days + hours as smallest unit
+            seq(digits, /[dD]/, decimal_digits, /[hH]/),
+            // Days as smallest unit
+            seq(decimal_digits, /[dD]/)
+          )
+        )
+      );
+    },
 
     noop: (_) => SEMICOLON,
 

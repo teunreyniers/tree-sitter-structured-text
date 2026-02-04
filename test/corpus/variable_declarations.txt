@@ -1,0 +1,259 @@
+==================
+Variable with pragma attribute
+==================
+
+FUNCTION_BLOCK test
+VAR
+	{attribute 'symbol' := 'readwrite'}
+	Restart : BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (pragma)
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+Variable with comment and pragma
+==================
+
+FUNCTION_BLOCK test
+VAR
+	/// Command to restart the test
+	{attribute 'symbol' := 'readwrite'}
+	Restart : BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (comment)
+        (pragma)
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+Variable with block comment
+==================
+
+FUNCTION_BLOCK test
+VAR
+	(* Config vars *)
+	/// Command to restart the test
+	{attribute 'symbol' := 'readwrite'}
+	Restart : BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (comment)
+        (comment)
+        (pragma)
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+Variable with initial value and pragma
+==================
+
+FUNCTION_BLOCK test
+VAR
+	{attribute 'symbol' := 'read'}
+	CurrentStep : INT := -1;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (pragma)
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (unary_expression (integer_literal))))))
+
+==================
+Multiple variables with pragmas and comments
+==================
+
+FUNCTION_BLOCK test
+VAR
+	{attribute 'symbol' := 'readwrite'}
+	/// If true the test execution is stopped after the first error message 
+	StopOnError : BOOL;
+	
+	(* Public vars *)
+	
+	/// Current state of the test
+	{attribute 'symbol' := 'read'}
+	State: TestState;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (pragma)
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        (comment)
+        (comment)
+        (pragma)
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+VAR CONSTANT section
+==================
+
+FUNCTION_BLOCK test
+VAR CONSTANT
+	/// Maximum number of error messages.
+	MESSAGE_COUNT : USINT := 10;
+	MAX_LOOPS: USINT := 10;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var_constant
+      (variable_declaration
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (integer_literal))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (integer_literal)))))
+
+==================
+Multiple VAR sections
+==================
+
+FUNCTION_BLOCK test
+VAR
+	_error : BOOL;
+END_VAR
+VAR
+	_next : BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+Variable with array type and pragma
+==================
+
+FUNCTION_BLOCK test
+VAR
+	/// List of error messages
+	{attribute 'symbol' := 'read'}
+	Messages : ARRAY [0..MESSAGE_COUNT] OF TestErrorMessage;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (comment)
+        (pragma)
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (identifier))
+            element_type: (type_name (identifier))))))))
+
+==================
+Variable with TIME literal
+==================
+
+FUNCTION_BLOCK test
+VAR
+	/// Internal var to that stores the current step delay
+	_delay : TIME := T#0MS;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+Variable with lowercase bool
+==================
+
+FUNCTION_BLOCK test
+VAR
+	/// Indicates that a loop jump is already handled
+	_loop_handled : bool;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier))))))

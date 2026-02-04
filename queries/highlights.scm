@@ -21,6 +21,7 @@
 [
   (integer_literal)
   (float_literal)
+  (time_literal)
 ] @number
 
 [
@@ -58,6 +59,7 @@
   "var_static"
   "var_global"
   "var_external"
+  "constant"
   "end_var"
 ] @keyword
 
@@ -122,10 +124,7 @@
   ")"
 ] @punctuation.bracket
 
-[
-  "{"
-  "}"
-] @punctuation.bracket
+(pragma) @attribute
 
 [
   ".."

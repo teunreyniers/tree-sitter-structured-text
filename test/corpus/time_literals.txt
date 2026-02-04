@@ -1,0 +1,336 @@
+==================
+TIME literal milliseconds
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#100MS;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal seconds
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#45S;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal minutes
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#30M;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal hours
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#5H;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal days
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#10D;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal combined
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#1D2H3M4S500MS;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal lowercase t
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := t#100ms;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal in assignment
+==================
+
+FUNCTION test : BOOL
+
+	test := TO_TIME(SysTimeGetMs() - _start_time) >= T#5S;
+
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (comparison_operator
+          left: (function_call
+            name: (identifier)
+            (param_assignment
+              (binary_operator
+                left: (function_call
+                  name: (identifier))
+                right: (identifier))))
+          right: (time_literal))))))
+
+==================
+TIME literal zero
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#0MS;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal decimal milliseconds
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#100.5MS;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal decimal seconds
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#5.25S;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal decimal minutes
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#2.5M;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal decimal hours
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#1.5H;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal combined with decimal smallest unit
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#1H30M45.75S;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
+
+==================
+TIME literal seconds with decimal milliseconds
+==================
+
+FUNCTION test : BOOL
+VAR
+	delay : TIME := T#5S250.5MS;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))
+        initial_value: (time_literal)))))
