@@ -2207,14 +2207,6 @@
     "named": false
   },
   {
-    "type": "NOT",
-    "named": false
-  },
-  {
-    "type": "RETURN",
-    "named": false
-  },
-  {
     "type": "TRUE",
     "named": false
   },
@@ -2333,6 +2325,10 @@
   },
   {
     "type": "region",
+    "named": false
+  },
+  {
+    "type": "return",
     "named": false
   },
   {

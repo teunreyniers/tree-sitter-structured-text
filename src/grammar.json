@@ -1237,8 +1237,22 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "STRING",
-                  "value": "NOT"
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "not"
+                      },
+                      {
+                        "type": "STRING",
+                        "value": "NOT"
+                      }
+                    ]
+                  },
+                  "named": false,
+                  "value": "not"
                 },
                 {
                   "type": "BLANK"
@@ -2074,8 +2088,22 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "RETURN"
+          "type": "ALIAS",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "return"
+              },
+              {
+                "type": "STRING",
+                "value": "RETURN"
+              }
+            ]
+          },
+          "named": false,
+          "value": "return"
         },
         {
           "type": "CHOICE",

@@ -227,7 +227,7 @@ export default grammar({
     param_assignment: ($) =>
       choice(
         seq(optional(seq($.identifier, ":=")), $._expression),
-        seq(optional("NOT"), $.identifier, "=>", $.identifier)
+        seq(optional(caseInsensitive("not")), $.identifier, "=>", $.identifier)
       ),
 
     true: (_) => choice("TRUE", "true", "True"),
@@ -363,7 +363,7 @@ export default grammar({
         $.return
       ),
 
-    return: ($) => seq("RETURN", optional($._expression)),
+    return: ($) => seq(caseInsensitive("return"), optional($._expression)),
 
     fb_invocation: ($) =>
       seq(
