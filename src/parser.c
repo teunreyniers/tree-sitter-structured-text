@@ -2150,9 +2150,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 20:
       if (lookahead == ')') ADVANCE(824);
-      if (lookahead == '*') ADVANCE(20);
-      if (lookahead != 0 &&
-          lookahead != '/') ADVANCE(22);
+      if (lookahead != 0) ADVANCE(22);
       END_STATE();
     case 21:
       if (lookahead == '*') ADVANCE(22);
@@ -3384,9 +3382,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 382:
       ACCEPT_TOKEN(aux_sym_pragma_token1);
-      if (lookahead == ')') ADVANCE(384);
-      if (lookahead == '*') ADVANCE(382);
-      if (lookahead == '/') ADVANCE(386);
+      if (lookahead == ')') ADVANCE(386);
       if (lookahead == '}') ADVANCE(22);
       if (lookahead != 0) ADVANCE(384);
       END_STATE();
@@ -6508,8 +6504,6 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 824:
       ACCEPT_TOKEN(sym_comment);
-      if (lookahead == '*') ADVANCE(20);
-      if (lookahead != 0) ADVANCE(22);
       END_STATE();
     case 825:
       ACCEPT_TOKEN(sym_comment);

@@ -66,3 +66,73 @@ Comment
       (comment)
       (block
         (noop)))
+
+==================
+Multiple block comments
+==================
+
+FUNCTION_BLOCK Test
+VAR
+	(* Config vars *)
+	Restart : BOOL;
+	
+	(* Public vars *)
+	State: INT;
+	
+	(* Local vars *)
+	_step : INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        (comment)
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+Block comment with asterisks inside
+==================
+
+(* This is a comment with * asterisks * inside *)
+var := expr;
+
+---
+
+(source
+  (comment)
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (identifier))))
+
+==================
+Adjacent block comments
+==================
+
+(* First comment *)
+(* Second comment *)
+var := expr;
+
+---
+
+(source
+  (comment)
+  (comment)
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (identifier))))
