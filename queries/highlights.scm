@@ -26,13 +26,14 @@
 [
   (true)
   (false)
+  "TRUE"
+  "True"
+  "FALSE"
+  "False"
 ] @constant.builtin
 
 ; Comments
 (comment) @comment
-
-; Pragmas
-(pragma) @attribute
 
 ; Keywords
 [
@@ -74,8 +75,6 @@
 [
   "return"
 ] @keyword.return
-
-
 
 ; Operators
 [
