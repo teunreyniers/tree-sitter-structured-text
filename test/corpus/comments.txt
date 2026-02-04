@@ -1,0 +1,68 @@
+==================
+Single line comment
+==================
+
+// A single line comment
+var := expr;
+
+---
+
+(source
+    (comment)
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (identifier)
+)))
+
+==================
+Inline comment
+==================
+
+var := (* inline comment *) expr;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        (comment)
+        expression: (identifier)
+)))
+
+==================
+Multiline comment
+==================
+
+(*
+    A single line comment
+    Another line
+*)
+var := expr;
+
+---
+
+(source
+    (comment)
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (identifier)
+)))
+
+==================
+Comment
+==================
+
+(*
+    A single line comment
+    Another line
+*);
+
+---
+
+(source
+      (comment)
+      (block
+        (noop)))

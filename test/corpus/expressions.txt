@@ -1,0 +1,441 @@
+==================
+Addition
+==================
+
+var := x + x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Multiplication
+==================
+
+var := x * x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Order of precedence
+==================
+
+var := x + x * x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (binary_operator
+            left: (identifier)
+            right: (identifier)))
+)))
+
+==================
+Left precedence
+==================
+
+var := x + x + x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left:  (binary_operator
+            left: (identifier)
+            right: (identifier))
+         right: (identifier))
+)))
+
+==================
+Parentheses precedence
+==================
+
+var := x + (x + x);
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (parenthesized_expression (binary_operator
+                left: (identifier)
+                right: (identifier)))))))
+
+==================
+Boolean operator AND
+==================
+
+var := true and false;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (boolean_operator
+         left: (true)
+         right: (false)))))
+
+==================
+Boolean operator upper AND
+==================
+
+var := true AND false;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (boolean_operator
+         left: (true)
+         right: (false)))))
+
+==================
+Boolean operator OR
+==================
+
+var := true or false;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (boolean_operator
+         left: (true)
+         right: (false)))))
+
+==================
+Boolean operator XOR
+==================
+
+var := true xor false;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (boolean_operator
+         left: (true)
+         right: (false)))))
+
+
+==================
+Subtraction
+==================
+
+var := x - x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Division
+==================
+
+var := x / x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Modulus
+==================
+
+var := x MOD x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Equal
+==================
+
+var := x = x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (equality_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+
+==================
+Not equal
+==================
+
+var := x <> x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (equality_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Power
+==================
+
+var := x**x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Greater than
+==================
+
+var := x > x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (comparison_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Greater than or equal
+==================
+
+var := x >= x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (comparison_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Less than
+==================
+
+var := x < x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (comparison_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Less than or equal
+==================
+
+var := x <= x;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (comparison_operator
+         left: (identifier)
+         right: (identifier))
+)))
+
+==================
+Function call without parameters
+==================
+
+var := x();
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (function_call 
+            name: (identifier))
+)))
+
+==================
+Function call input parameter
+==================
+
+var := x(hello := 0);
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (function_call 
+            name: (identifier) 
+            (param_assignment 
+             (identifier)
+             (integer_literal)))
+)))
+
+==================
+Function call output parameter
+==================
+
+var := x(hello => m);
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (function_call 
+            name: (identifier) 
+            (param_assignment 
+             (identifier)
+             (identifier)))
+)))
+
+==================
+Function call negated output parameter
+==================
+
+var := x(NOT hello => m);
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (function_call 
+            name: (identifier) 
+            (param_assignment 
+             (identifier)
+             (identifier)))
+)))
+
+==================
+Function call input output parameter
+==================
+
+var := x(hello := 0 , y => y);
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (function_call 
+            name: (identifier) 
+            (param_assignment 
+             (identifier)
+             (integer_literal))
+            (param_assignment 
+             (identifier)
+             (identifier)))
+)))
+
+==================
+Function call in input parameter
+==================
+
+var := x(hello := x());
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (function_call 
+            name: (identifier) 
+            (param_assignment 
+             (identifier)
+             (function_call 
+            name: (identifier))))
+)))
+

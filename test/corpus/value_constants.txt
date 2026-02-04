@@ -1,0 +1,239 @@
+==================
+float_literal
+==================
+
+var := 1.3;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (float_literal)
+)))
+
+==================
+float_literal exponential notation
+==================
+
+var := 1E3;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (float_literal)
+)))
+
+==================
+float_literal exponential notation
+==================
+
+var := 1.3E3;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (float_literal)
+)))
+
+==================
+float_literal long
+==================
+
+var := 1545698453547.31543;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (float_literal)
+)))
+
+==================
+float_literal implicit
+==================
+
+var := 1.;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (float_literal)
+)))
+
+==================
+integer_literal 1 digit
+==================
+
+var := 1;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (integer_literal)
+)))
+
+==================
+integer_literal hexadecimal
+==================
+
+var := 16#20fd;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (integer_literal)
+)))
+
+==================
+integer_literal binary
+==================
+
+var := 2#1010;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (integer_literal)
+)))
+
+==================
+integer_literal binary separated
+==================
+
+var := 2#1010_1001;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (integer_literal)
+)))
+
+==================
+integer_literal octal
+==================
+
+var := 8#563;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (integer_literal)
+)))
+
+==================
+Boolean lower true
+==================
+
+var := true;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (true)
+)))
+
+==================
+Boolean lower false
+==================
+
+var := false;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (false)
+)))
+
+==================
+Boolean upper true
+==================
+
+var := TRUE;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (true)
+)))
+
+==================
+Boolean upper false
+==================
+
+var := FALSE;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (false)
+)))
+
+==================
+Boolean mixed true
+==================
+
+var := True;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (true)
+)))
+
+==================
+Boolean mixed false
+==================
+
+var := False;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (false)
+)))

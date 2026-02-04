@@ -1,0 +1,44 @@
+==================
+Function block invocation input output parameter
+==================
+
+x(hello := 0 , y => y);
+
+---
+
+(source
+    (block
+    (fb_invocation 
+            (identifier) 
+            (param_assignment 
+             (identifier)
+             (integer_literal))
+            (param_assignment 
+             (identifier)
+             (identifier))
+    )))
+
+
+==================
+Function block return statement
+==================
+
+RETURN;
+
+---
+
+(source
+    (block
+    (return)))
+
+==================
+Return value
+==================
+
+RETURN y;
+
+---
+
+(source
+    (block
+    (return (identifier))))

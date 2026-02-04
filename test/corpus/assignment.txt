@@ -1,0 +1,14 @@
+==================
+Variable assignment
+==================
+
+var := expr;
+
+---
+
+(source
+    (block
+    (assignment
+        identifier: (identifier)
+        expression: (identifier)
+)))
