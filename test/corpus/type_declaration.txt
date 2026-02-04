@@ -30,51 +30,35 @@ END_TYPE
     name: (identifier)
     definition: (struct_definition
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier)))
       (struct_field
-        (attribute
-          name: (string_literal)
-          value: (string_literal))
+        (pragma)
         name: (identifier)
         type: (type_name (identifier))))))
 

@@ -82,32 +82,6 @@
     }
   },
   {
-    "type": "attribute",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      },
-      "value": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "string_literal",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "binary_operator",
     "named": true,
     "fields": {
@@ -296,11 +270,7 @@
           "named": true
         },
         {
-          "type": "region_end",
-          "named": true
-        },
-        {
-          "type": "region_start",
+          "type": "pragma",
           "named": true
         },
         {
@@ -1458,6 +1428,11 @@
     }
   },
   {
+    "type": "pragma",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "program_declaration",
     "named": true,
     "fields": {
@@ -1535,16 +1510,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "region_end",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "region_start",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "return",
@@ -1646,11 +1611,6 @@
     }
   },
   {
-    "type": "string_literal",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "struct_definition",
     "named": true,
     "fields": {},
@@ -1695,7 +1655,7 @@
       "required": false,
       "types": [
         {
-          "type": "attribute",
+          "type": "pragma",
           "named": true
         }
       ]
@@ -2111,10 +2071,6 @@
     }
   },
   {
-    "type": "'",
-    "named": false
-  },
-  {
     "type": "(",
     "named": false
   },
@@ -2219,10 +2175,6 @@
     "named": false
   },
   {
-    "type": "attribute",
-    "named": false
-  },
-  {
     "type": "case",
     "named": false
   },
@@ -2276,10 +2228,6 @@
     "named": false
   },
   {
-    "type": "endregion",
-    "named": false
-  },
-  {
     "type": "false",
     "named": false
   },
@@ -2321,10 +2269,6 @@
   },
   {
     "type": "program",
-    "named": false
-  },
-  {
-    "type": "region",
     "named": false
   },
   {

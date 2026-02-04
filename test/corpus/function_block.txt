@@ -51,13 +51,13 @@ END_FUNCTION_BLOCK
         name: (identifier)
         type: (type_name (identifier))))
     body: (block
-      (region_start)
+      (pragma)
       (assignment
         identifier: (identifier)
         expression: (comparison_operator
           left: (qualified_identifier (identifier) (identifier))
           right: (qualified_identifier (identifier) (identifier))))
-      (region_end))))
+      (pragma))))
 
 ==================
 Function with return type

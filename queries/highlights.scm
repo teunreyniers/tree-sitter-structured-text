@@ -23,8 +23,6 @@
   (float_literal)
 ] @number
 
-(string_literal) @string
-
 [
   (true)
   (false)
@@ -32,6 +30,9 @@
 
 ; Comments
 (comment) @comment
+
+; Pragmas
+(pragma) @attribute
 
 ; Keywords
 [
@@ -74,14 +75,7 @@
   "return"
 ] @keyword.return
 
-[
-  "attribute"
-] @keyword.directive
 
-[
-  "region"
-  "endregion"
-] @keyword.directive
 
 ; Operators
 [

@@ -48,7 +48,7 @@ export default grammar({
       $.block
     ),
 
-    block: ($) => repeat1(choice(seq($._statement, ";"), $.noop, $.region_start, $.region_end)),
+    block: ($) => repeat1(choice(seq($._statement, ";"), $.noop, $.pragma)),
 
     // Program organization units
     function_block_declaration: ($) =>
@@ -97,22 +97,14 @@ export default grammar({
 
     struct_field: ($) =>
       seq(
-        repeat($.attribute),
+        repeat($.pragma),
         field("name", $.identifier),
         ":",
         field("type", $.type_name),
         ";"
       ),
 
-    attribute: ($) =>
-      seq(
-        "{",
-        caseInsensitive("attribute"),
-        field("name", $.string_literal),
-        ":=",
-        field("value", $.string_literal),
-        "}"
-      ),
+    pragma: ($) => seq("{", optional(/[^\}]*/), "}"),
 
     _var_section: ($) =>
       choice(
@@ -193,9 +185,6 @@ export default grammar({
       ),
 
     type_name: ($) => $.identifier,
-
-    region_start: ($) => seq("{", caseInsensitive("region"), optional(/[^\}]*/), "}"),
-    region_end: ($) => seq("{", caseInsensitive("endregion"), "}"),
 
     // Expression
     _expression: ($) =>
