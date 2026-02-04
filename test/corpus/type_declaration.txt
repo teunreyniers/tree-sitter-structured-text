@@ -1,0 +1,107 @@
+==================
+TYPE with STRUCT
+==================
+
+TYPE api_grist_update_record_udt :
+STRUCT
+	{attribute 'symbol' := 'readwrite'}
+	update: BOOL;
+	{attribute 'symbol' := 'readwrite'}
+	success: BOOL;
+	{attribute 'symbol' := 'readwrite'}
+	failed: BOOL;
+	{attribute 'symbol' := 'readwrite'}
+	result_handled: BOOL;
+	{attribute 'symbol' := 'readwrite'}
+	record_list_empty: BOOL;
+	{attribute 'symbol' := 'readwrite'}
+	lock_batch: BOOL;
+	{attribute 'symbol' := 'readwrite'}
+	record_id: DINT;
+	{attribute 'symbol' := 'readwrite'}
+	execute: BOOL;
+END_STRUCT
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    name: (identifier)
+    definition: (struct_definition
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        (attribute
+          name: (string_literal)
+          value: (string_literal))
+        name: (identifier)
+        type: (type_name (identifier))))))
+
+==================
+TYPE with STRUCT no attributes
+==================
+
+TYPE SimpleStruct :
+STRUCT
+	x: INT;
+	y: INT;
+	enabled: BOOL;
+END_STRUCT
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    name: (identifier)
+    definition: (struct_definition
+      (struct_field
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        name: (identifier)
+        type: (type_name (identifier)))
+      (struct_field
+        name: (identifier)
+        type: (type_name (identifier))))))

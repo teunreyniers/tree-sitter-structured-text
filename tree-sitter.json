@@ -12,7 +12,8 @@
         "scl"
       ],
       "injection-regex": "^structured_text$",
-      "class-name": "TreeSitterStructuredText"
+      "class-name": "TreeSitterStructuredText",
+      "highlights": "queries/highlights.scm"
     }
   ],
   "metadata": {

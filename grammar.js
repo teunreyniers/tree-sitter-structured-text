@@ -43,13 +43,164 @@ export default grammar({
   extras: ($) => [/\s/, $.comment],
 
   rules: {
-    source: ($) => $.block,
+    source: ($) => choice(
+      repeat1(choice($.function_block_declaration, $.function_declaration, $.program_declaration, $.type_declaration)),
+      $.block
+    ),
 
-    block: ($) => repeat1(choice(seq($._statement, ";"), $.noop)),
+    block: ($) => repeat1(choice(seq($._statement, ";"), $.noop, $.region_start, $.region_end)),
+
+    // Program organization units
+    function_block_declaration: ($) =>
+      seq(
+        caseInsensitive("function_block"),
+        field("name", $.identifier),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_function_block")
+      ),
+
+    function_declaration: ($) =>
+      seq(
+        caseInsensitive("function"),
+        field("name", $.identifier),
+        optional(seq(":", field("return_type", $.type_name))),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_function")
+      ),
+
+    program_declaration: ($) =>
+      seq(
+        caseInsensitive("program"),
+        field("name", $.identifier),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_program")
+      ),
+
+    type_declaration: ($) =>
+      seq(
+        caseInsensitive("type"),
+        field("name", $.identifier),
+        ":",
+        field("definition", $.struct_definition),
+        caseInsensitive("end_type")
+      ),
+
+    struct_definition: ($) =>
+      seq(
+        caseInsensitive("struct"),
+        repeat($.struct_field),
+        caseInsensitive("end_struct")
+      ),
+
+    struct_field: ($) =>
+      seq(
+        repeat($.attribute),
+        field("name", $.identifier),
+        ":",
+        field("type", $.type_name),
+        ";"
+      ),
+
+    attribute: ($) =>
+      seq(
+        "{",
+        caseInsensitive("attribute"),
+        field("name", $.string_literal),
+        ":=",
+        field("value", $.string_literal),
+        "}"
+      ),
+
+    _var_section: ($) =>
+      choice(
+        $.var_input,
+        $.var_output,
+        $.var_in_out,
+        $.var,
+        $.var_temp,
+        $.var_static,
+        $.var_global,
+        $.var_external
+      ),
+
+    var_input: ($) =>
+      seq(
+        caseInsensitive("var_input"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var_output: ($) =>
+      seq(
+        caseInsensitive("var_output"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var_in_out: ($) =>
+      seq(
+        caseInsensitive("var_in_out"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var: ($) =>
+      seq(
+        caseInsensitive("var"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var_temp: ($) =>
+      seq(
+        caseInsensitive("var_temp"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var_static: ($) =>
+      seq(
+        caseInsensitive("var_static"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var_global: ($) =>
+      seq(
+        caseInsensitive("var_global"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    var_external: ($) =>
+      seq(
+        caseInsensitive("var_external"),
+        repeat($.variable_declaration),
+        caseInsensitive("end_var")
+      ),
+
+    variable_declaration: ($) =>
+      seq(
+        optional($.comment),
+        field("name", $.identifier),
+        ":",
+        field("type", $.type_name),
+        optional(seq(":=", field("initial_value", $._expression))),
+        ";"
+      ),
+
+    type_name: ($) => $.identifier,
+
+    region_start: ($) => seq("{", caseInsensitive("region"), optional(/[^\}]*/), "}"),
+    region_end: ($) => seq("{", caseInsensitive("endregion"), "}"),
 
     // Expression
     _expression: ($) =>
       choice(
+        $.qualified_identifier,
         $.identifier,
         $.unary_expression,
         $.binary_operator,
@@ -61,7 +212,8 @@ export default grammar({
         $.float_literal,
         $.integer_literal,
         $.true,
-        $.false
+        $.false,
+        $.type_conversion
       ),
 
     function_call: ($) =>
@@ -84,7 +236,17 @@ export default grammar({
     parenthesized_expression: ($) =>
       prec(PREC.parenthesized_expression, seq("(", $._expression, ")")),
 
-    unary_expression: ($) => choice(prec(PREC.unary, seq("-", $._expression))),
+    unary_expression: ($) => choice(prec(PREC.unary, seq("-", $._expression)), prec(PREC.unary, seq(caseInsensitive("not"), $._expression))),
+
+    type_conversion: ($) =>
+      seq(
+        field("type", $.conversion_type),
+        "(",
+        field("value", $._expression),
+        ")"
+      ),
+
+    conversion_type: (_) => token(/[A-Z_]+_TO_[A-Z_]+/),
 
     binary_operator: ($) =>
       choice(
@@ -188,7 +350,7 @@ export default grammar({
       );
     },
 
-    string_literal: ($) => seq("'", /.*/, "'"),
+    string_literal: ($) => seq("'", /[^']*/, "'"),
 
     noop: (_) => SEMICOLON,
 
@@ -214,10 +376,13 @@ export default grammar({
     // Variables
     identifier: (_) => /[_a-zA-Z][_a-zA-Z0-9]*/,
 
+    qualified_identifier: ($) =>
+      seq($.identifier, repeat1(seq(".", $.identifier))),
+
     // Assignments
     assignment: ($) =>
       seq(
-        field("identifier", $.identifier),
+        field("identifier", choice($.identifier, $.qualified_identifier)),
         ":=",
         field("expression", $._expression)
       ),

@@ -1,0 +1,155 @@
+==================
+Function block with variables
+==================
+
+FUNCTION_BLOCK analog_event_above_pou
+VAR_INPUT
+END_VAR
+VAR_IN_OUT
+	event: analog_event_above_udt;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	_delay_timer: TON;
+	_reset_trigger: R_TRIG;
+END_VAR
+VAR_TEMP
+	above_threshold: BOOL;
+	in_range: BOOL;
+END_VAR
+
+{region Event logic}
+	above_threshold := event.value >= event.threshold;
+{endregion}
+
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var_input)
+    var_section: (var_in_out
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    var_section: (var_output)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    var_section: (var_temp
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    body: (block
+      (region_start)
+      (assignment
+        identifier: (identifier)
+        expression: (comparison_operator
+          left: (qualified_identifier (identifier) (identifier))
+          right: (qualified_identifier (identifier) (identifier))))
+      (region_end))))
+
+==================
+Function with return type
+==================
+
+FUNCTION add_numbers : INT
+VAR_INPUT
+	a: INT;
+	b: INT;
+END_VAR
+
+	add_numbers := a + b;
+	RETURN add_numbers;
+
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var_input
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier)))
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+          left: (identifier)
+          right: (identifier)))
+      (return (identifier)))))
+
+==================
+Program declaration
+==================
+
+PROGRAM main_program
+VAR
+	counter: INT;
+END_VAR
+
+	counter := counter + 1;
+
+END_PROGRAM
+
+---
+
+(source
+  (program_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+          left: (identifier)
+          right: (integer_literal))))))
+
+==================
+Type conversion
+==================
+
+FUNCTION test_conversion : BOOL
+VAR
+	time_val: TIME;
+END_VAR
+
+	time_val := UDINT_TO_TIME(5000);
+
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name (identifier))))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (type_conversion
+          type: (conversion_type)
+          value: (integer_literal))))))
