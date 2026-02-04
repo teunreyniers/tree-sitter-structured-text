@@ -71,7 +71,7 @@
 ] @keyword.conditional
 
 [
-  "RETURN"
+  "return"
 ] @keyword.return
 
 [
@@ -110,7 +110,6 @@
   "and"
   "or"
   "xor"
-  "NOT"
   "not"
 ] @keyword.operator
 
