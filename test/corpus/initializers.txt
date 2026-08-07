@@ -1,0 +1,255 @@
+==================
+Array initializer
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	a : ARRAY [0..2] OF INT := [1, 2, 3];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (integer_literal))
+            element_type: (type_name
+              (identifier))))
+        initial_value: (array_initializer
+          (integer_literal)
+          (integer_literal)
+          (integer_literal))))))
+
+==================
+Array initializer with repetition
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	a : ARRAY [0..9] OF INT := [10(0)];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (integer_literal))
+            element_type: (type_name
+              (identifier))))
+        initial_value: (array_initializer
+          (array_initializer_repetition
+            count: (integer_literal)
+            (integer_literal)))))))
+
+==================
+Array initializer mixing repetition and values
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	a : ARRAY [0..4] OF INT := [1, 3(0), 2];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (integer_literal))
+            element_type: (type_name
+              (identifier))))
+        initial_value: (array_initializer
+          (integer_literal)
+          (array_initializer_repetition
+            count: (integer_literal)
+            (integer_literal))
+          (integer_literal))))))
+
+==================
+Structure initializer
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	s : Point := (x := 1, y := 2);
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (structure_initializer
+          (structure_element_initializer
+            name: (identifier)
+            value: (integer_literal))
+          (structure_element_initializer
+            name: (identifier)
+            value: (integer_literal)))))))
+
+==================
+Nested structure initializer
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	s : Line := (a := (x := 1, y := 2), b := (x := 3, y := 4));
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (structure_initializer
+          (structure_element_initializer
+            name: (identifier)
+            value: (structure_initializer
+              (structure_element_initializer
+                name: (identifier)
+                value: (integer_literal))
+              (structure_element_initializer
+                name: (identifier)
+                value: (integer_literal))))
+          (structure_element_initializer
+            name: (identifier)
+            value: (structure_initializer
+              (structure_element_initializer
+                name: (identifier)
+                value: (integer_literal))
+              (structure_element_initializer
+                name: (identifier)
+                value: (integer_literal)))))))))
+
+==================
+Array of structures
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	points : ARRAY [0..1] OF Point := [(x := 1, y := 2), (x := 3, y := 4)];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (integer_literal))
+            element_type: (type_name
+              (identifier))))
+        initial_value: (array_initializer
+          (structure_initializer
+            (structure_element_initializer
+              name: (identifier)
+              value: (integer_literal))
+            (structure_element_initializer
+              name: (identifier)
+              value: (integer_literal)))
+          (structure_initializer
+            (structure_element_initializer
+              name: (identifier)
+              value: (integer_literal))
+            (structure_element_initializer
+              name: (identifier)
+              value: (integer_literal))))))))
+
+==================
+Struct field with an array initializer
+==================
+
+TYPE T :
+STRUCT
+	a : ARRAY [0..2] OF INT := [1, 2, 3];
+END_STRUCT
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (array_type
+              range: (array_range
+                start: (integer_literal)
+                end: (integer_literal))
+              element_type: (type_name
+                (identifier))))
+          initial_value: (array_initializer
+            (integer_literal)
+            (integer_literal)
+            (integer_literal)))))))
+
+==================
+Plain expression initial value is unchanged
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	x : INT := 1 + 2;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (binary_operator
+          left: (integer_literal)
+          right: (integer_literal))))))

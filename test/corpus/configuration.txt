@@ -1,0 +1,127 @@
+==================
+Configuration with a resource
+==================
+
+CONFIGURATION Plant
+	RESOURCE Station ON CPU_001
+		TASK Fast (INTERVAL := t#20ms, PRIORITY := 1);
+		PROGRAM Main WITH Fast : Tests_At_20ms;
+	END_RESOURCE
+END_CONFIGURATION
+
+---
+
+(source
+  (configuration_declaration
+    name: (identifier)
+    (resource_declaration
+      name: (identifier)
+      type: (identifier)
+      (task_declaration
+        name: (identifier)
+        (task_parameter
+          name: (identifier)
+          value: (time_literal))
+        (task_parameter
+          name: (identifier)
+          value: (integer_literal)))
+      (program_configuration
+        name: (identifier)
+        task: (identifier)
+        type: (identifier)))))
+
+==================
+Configuration with global variables
+==================
+
+CONFIGURATION Plant
+	VAR_GLOBAL
+		Restart : BOOL;
+	END_VAR
+	RESOURCE Station ON CPU_001
+	END_RESOURCE
+END_CONFIGURATION
+
+---
+
+(source
+  (configuration_declaration
+    name: (identifier)
+    (var_global
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    (resource_declaration
+      name: (identifier)
+      type: (identifier))))
+
+==================
+Task triggered by a single event
+==================
+
+CONFIGURATION Plant
+	RESOURCE Station ON CPU_001
+		TASK Event (SINGLE := Trigger, PRIORITY := 0);
+	END_RESOURCE
+END_CONFIGURATION
+
+---
+
+(source
+  (configuration_declaration
+    name: (identifier)
+    (resource_declaration
+      name: (identifier)
+      type: (identifier)
+      (task_declaration
+        name: (identifier)
+        (task_parameter
+          name: (identifier)
+          value: (identifier))
+        (task_parameter
+          name: (identifier)
+          value: (integer_literal))))))
+
+==================
+Program configuration with parameters
+==================
+
+CONFIGURATION Plant
+	RESOURCE Station ON CPU_001
+		PROGRAM Main WITH Fast : Runner (Restart := TRUE);
+	END_RESOURCE
+END_CONFIGURATION
+
+---
+
+(source
+  (configuration_declaration
+    name: (identifier)
+    (resource_declaration
+      name: (identifier)
+      type: (identifier)
+      (program_configuration
+        name: (identifier)
+        task: (identifier)
+        type: (identifier)
+        (param_assignment
+          (identifier)
+          (true))))))
+
+==================
+Program configuration without a task
+==================
+
+CONFIGURATION Plant
+	PROGRAM Main : Runner;
+END_CONFIGURATION
+
+---
+
+(source
+  (configuration_declaration
+    name: (identifier)
+    (program_configuration
+      name: (identifier)
+      type: (identifier))))

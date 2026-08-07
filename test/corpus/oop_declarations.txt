@@ -1,0 +1,350 @@
+==================
+Method inside a function block
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	count : INT;
+END_VAR
+count := count + 1;
+METHOD Reset : BOOL
+	count := 0;
+	Reset := TRUE;
+END_METHOD
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+          left: (identifier)
+          right: (integer_literal))))
+    member: (method_declaration
+      name: (identifier)
+      return_type: (type_name
+        (identifier))
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))
+        (assignment
+          identifier: (identifier)
+          expression: (true))))))
+
+==================
+Several members inside a function block
+==================
+
+FUNCTION_BLOCK FB
+METHOD Start : BOOL
+END_METHOD
+METHOD Stop : BOOL
+END_METHOD
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    member: (method_declaration
+      name: (identifier)
+      return_type: (type_name
+        (identifier)))
+    member: (method_declaration
+      name: (identifier)
+      return_type: (type_name
+        (identifier)))))
+
+==================
+Method with an access specifier
+==================
+
+FUNCTION_BLOCK FB
+METHOD PUBLIC Run : BOOL
+END_METHOD
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    member: (method_declaration
+      access: (access_specifier)
+      name: (identifier)
+      return_type: (type_name
+        (identifier)))))
+
+==================
+Method with combined access specifiers
+==================
+
+FUNCTION_BLOCK FB
+METHOD PUBLIC ABSTRACT Run : BOOL
+END_METHOD
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    member: (method_declaration
+      access: (access_specifier)
+      name: (identifier)
+      return_type: (type_name
+        (identifier)))))
+
+==================
+Property with both accessors
+==================
+
+FUNCTION_BLOCK FB
+PROPERTY Value : INT
+GET
+	Value := _value;
+END_GET
+SET
+	_value := Value;
+END_SET
+END_PROPERTY
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    member: (property_declaration
+      name: (identifier)
+      type: (type_name
+        (identifier))
+      accessor: (get_accessor
+        body: (block
+          (assignment
+            identifier: (identifier)
+            expression: (identifier))))
+      accessor: (set_accessor
+        body: (block
+          (assignment
+            identifier: (identifier)
+            expression: (identifier)))))))
+
+==================
+Read only property
+==================
+
+FUNCTION_BLOCK FB
+PROPERTY PUBLIC State : INT
+GET
+	State := 1;
+END_GET
+END_PROPERTY
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    member: (property_declaration
+      access: (access_specifier)
+      name: (identifier)
+      type: (type_name
+        (identifier))
+      accessor: (get_accessor
+        body: (block
+          (assignment
+            identifier: (identifier)
+            expression: (integer_literal)))))))
+
+==================
+Action inside a function block
+==================
+
+FUNCTION_BLOCK FB
+ACTION Recalculate:
+	x := 1;
+END_ACTION
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    member: (action_declaration
+      name: (identifier)
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))))))
+
+==================
+Action exported as its own file
+==================
+
+ACTION Recalculate:
+	x := 1;
+END_ACTION
+
+---
+
+(source
+  (action_declaration
+    name: (identifier)
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (integer_literal)))))
+
+==================
+Implements a single interface
+==================
+
+FUNCTION_BLOCK FB IMPLEMENTS IStartable
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    (implements_clause
+      interface: (identifier))))
+
+==================
+Extends and implements together
+==================
+
+FUNCTION_BLOCK FB EXTENDS Base IMPLEMENTS IStartable, IStoppable
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier))
+    (implements_clause
+      interface: (identifier)
+      interface: (identifier))))
+
+==================
+Interface declaration
+==================
+
+INTERFACE IStartable
+METHOD Start : BOOL
+END_METHOD
+PROPERTY Ready : BOOL
+GET
+END_GET
+END_PROPERTY
+END_INTERFACE
+
+---
+
+(source
+  (interface_declaration
+    name: (identifier)
+    member: (method_declaration
+      name: (identifier)
+      return_type: (type_name
+        (identifier)))
+    member: (property_declaration
+      name: (identifier)
+      type: (type_name
+        (identifier))
+      accessor: (get_accessor))))
+
+==================
+Interface extending several interfaces
+==================
+
+INTERFACE IBoth EXTENDS IStartable, IStoppable
+END_INTERFACE
+
+---
+
+(source
+  (interface_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier)
+      base: (identifier))))
+
+==================
+Program with a member
+==================
+
+PROGRAM P
+x := 1;
+ACTION Reset:
+	x := 0;
+END_ACTION
+END_PROGRAM
+
+---
+
+(source
+  (program_declaration
+    name: (identifier)
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (integer_literal)))
+    member: (action_declaration
+      name: (identifier)
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))))))
+
+==================
+Class declaration
+==================
+
+CLASS Motor EXTENDS Device IMPLEMENTS IStartable
+VAR
+	speed : INT;
+END_VAR
+METHOD Start : BOOL
+	speed := 1;
+END_METHOD
+END_CLASS
+
+---
+
+(source
+  (class_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier))
+    (implements_clause
+      interface: (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    member: (method_declaration
+      name: (identifier)
+      return_type: (type_name
+        (identifier))
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))))))

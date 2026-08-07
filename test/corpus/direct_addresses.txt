@@ -1,0 +1,129 @@
+==================
+Located input bit
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	start AT %IX0.0 : BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        location: (direct_address)
+        type: (type_name
+          (identifier))))))
+
+==================
+Located output word
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	setpoint AT %QW12 : INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        location: (direct_address)
+        type: (type_name
+          (identifier))))))
+
+==================
+Located memory double word
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	counter AT %MD100 : DWORD;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        location: (direct_address)
+        type: (type_name
+          (identifier))))))
+
+==================
+Compiler assigned location
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	spare AT %I* : BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        location: (direct_address)
+        type: (type_name
+          (identifier))))))
+
+==================
+Direct address in an expression
+==================
+
+x := %MW100;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (direct_address))))
+
+==================
+Direct address as an assignment target
+==================
+
+%QX0.1 := TRUE;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (direct_address)
+      expression: (true))))
+
+==================
+Lower case direct address
+==================
+
+x := %iw4;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (direct_address))))

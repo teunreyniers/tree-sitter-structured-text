@@ -8,29 +8,45 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 
 **Program organization units**
 
-- `FUNCTION_BLOCK` / `END_FUNCTION_BLOCK`
+- `FUNCTION_BLOCK` / `END_FUNCTION_BLOCK`, with `EXTENDS` and `IMPLEMENTS`
 - `FUNCTION` / `END_FUNCTION`, with optional return type
 - `PROGRAM` / `END_PROGRAM`
+- `CLASS` / `END_CLASS` and `INTERFACE` / `END_INTERFACE`
 - `TEST_FUNCTION_BLOCK` / `END_TEST_FUNCTION_BLOCK`, as used by ST unit-test frameworks
-- `TYPE` / `END_TYPE` with `STRUCT` definitions, including per-field initial values
+- `TYPE` / `END_TYPE` holding one or more definitions: `STRUCT`, enumerations, aliases, subranges and array types, each with optional initial values
+
+**Object orientation**
+
+- `METHOD` / `END_METHOD`, `PROPERTY` with `GET` / `SET`, and `ACTION` / `END_ACTION`, written inside their POU or exported one per file
+- Access specifiers `PUBLIC`, `PRIVATE`, `PROTECTED`, `INTERNAL`, `FINAL`, `ABSTRACT`
+- `THIS^` and `SUPER^`, including `SUPER^()` to call the base implementation
 
 **Variable sections**
 
-`VAR`, `VAR_INPUT`, `VAR_OUTPUT`, `VAR_IN_OUT`, `VAR_TEMP`, `VAR_STATIC`, `VAR_GLOBAL`, `VAR_EXTERNAL` — each terminated by `END_VAR`, with optional initial values.
+`VAR`, `VAR_INPUT`, `VAR_OUTPUT`, `VAR_IN_OUT`, `VAR_TEMP`, `VAR_STATIC`, `VAR_GLOBAL`, `VAR_EXTERNAL`, `VAR_INST` — each terminated by `END_VAR`, with optional initial values. A `VAR_GLOBAL` list may stand alone as a whole file.
 
 Any section may carry the qualifiers `CONSTANT`, `RETAIN`, `NON_RETAIN` and `PERSISTENT`, alone or combined (`VAR RETAIN PERSISTENT`).
 
+Declarations may be located with `AT %IX0.0`, and initialised with an array initialiser `[1, 2, 3]` (including the `10(0)` repetition form) or a structure initialiser `(x := 1, y := 2)`.
+
 **Types**
 
-- Simple type names
+- Simple and namespaced type names (`CmpApp.EVTPARAM_CmpApp`)
 - Multi-dimensional `ARRAY [1..10, 0..3] OF <type>`, including nested arrays, identifier bounds and arithmetic bounds such as `[0..MAX_DEVICES - 1]`
+- Sized `STRING[80]` / `WSTRING(80)` and subranges `INT (0..100)`
+- `POINTER TO` and `REFERENCE TO`
+
+**Configuration**
+
+`CONFIGURATION` / `END_CONFIGURATION`, `RESOURCE … ON … END_RESOURCE`, `TASK` with its parameter list, and `PROGRAM … WITH … : …` instance declarations.
 
 **Statements**
 
-- Assignment (`:=`), including qualified targets such as `motor.speed`
+- Assignment (`:=`) and reference assignment (`REF=`), including qualified targets such as `motor.speed`
 - The `;` after a compound statement is optional, so `END_IF` may close a statement on its own; simple statements still require it
+- Every statement body may be empty, so half-written code such as `IF c THEN END_IF` still parses
 - `IF` / `ELSIF` / `ELSE` / `END_IF`
-- `CASE` / `OF` / `ELSE` / `END_CASE`, with single labels, comma-separated labels and `1..5` ranges
+- `CASE` / `OF` / `ELSE` / `END_CASE`, with single labels, comma-separated labels and `1..5` ranges. Labels may be integers, negative integers, enumerators (`Color.Red`), booleans or typed literals
 - `FOR` / `TO` / `BY` / `DO` / `END_FOR`, with an optional `BY` step and arbitrary expressions as bounds
 - `WHILE` / `DO` / `END_WHILE`
 - `REPEAT` / `UNTIL` / `END_REPEAT`
@@ -44,8 +60,11 @@ Any section may carry the qualifiers `CONSTANT`, `RETAIN`, `NON_RETAIN` and `PER
 - Comparison `< <= > >=` and equality `= <>`
 - Boolean `AND`, `OR`, `XOR`, `NOT`, and unary `-`
 - Parenthesized expressions, function calls, qualified identifiers
-- Array subscripting `buffer[i]`, as an assignment target or an operand, including `m[i, j]` and `m[i][j]`
+- Namespaced and method calls, `FPU.IsRealNumber(x)` and `fb.Run(x := 1)`
+- Array subscripting `buffer[i]`, as an assignment target or an operand, including `m[i, j]`, `m[i][j]` and member access after a subscript (`items[i].value`)
+- Dereferencing `p^`, including `p^^`, `p^.field` and `items[i]^`
 - Single-bit access `input.0`, as an assignment target or an operand
+- Direct hardware addresses `%IX0.0`, `%MW100`, `%I*`, as an assignment target or an operand
 - Type conversions such as `INT_TO_REAL(x)`, parsed as ordinary function calls
 
 **Literals**
@@ -60,8 +79,9 @@ Any section may carry the qualifiers `CONSTANT`, `RETAIN`, `NON_RETAIN` and `PER
 
 **Other**
 
+- Keywords in any mix of cases: `IF`, `if` and `If` are all the same word
 - Line comments `// ...` and block comments `(* ... *)`, in any position including immediately before `END_VAR`
-- Pragmas / attributes `{ ... }` before variable declarations and struct fields
+- Pragmas / attributes `{ ... }` before variable declarations, struct fields, and whole declarations
 - Syntax highlighting queries in [`queries/highlights.scm`](queries/highlights.scm)
 
 ## Installation
@@ -135,21 +155,17 @@ Always re-run `tree-sitter generate` after editing `grammar.js`; the generated `
 
 ## Known limitations
 
-The grammar covers the subset of IEC 61131-3 needed for everyday ST code. Not yet supported:
+The grammar covers IEC 61131-3 Structured Text as written by CODESYS, TwinCAT and similar toolchains. Not supported:
 
-- Member access after a subscript, e.g. `items[i].value` (`obj.items[i]` does parse)
-- OOP extensions: `CLASS`, `INTERFACE`, `METHOD`, `PROPERTY`, `EXTENDS`, `IMPLEMENTS`
-- `ACTION`, `CONFIGURATION`, `RESOURCE`, `TASK`, `VAR_ACCESS`
-- Direct hardware addressing such as `%IX0.0` and `AT` declarations
-- Sized `STRING[80]` declarations
-- Enumerations and subrange type definitions (only `STRUCT` is parsed under `TYPE`)
+- Sequential Function Chart bodies (`STEP`, `TRANSITION`) — a different POU body language rather than an ST extension
+- `VAR_ACCESS` declarations
+- Ladder, Function Block Diagram and Instruction List
 
-Four parsing caveats worth knowing:
+Three parsing caveats worth knowing:
 
-- Keywords are case-insensitive only in their all-lowercase and all-uppercase forms. `IF` and `if` parse; `If` does not.
-- `MOD` is recognised in uppercase only.
-- Statement bodies cannot be empty. `IF c THEN END_IF;` and `WHILE c DO END_WHILE;` do not parse — write a bare `;` inside.
-- The section qualifiers are reserved: a variable named exactly `CONSTANT`, `RETAIN`, `NON_RETAIN` or `PERSISTENT` does not parse. Names that merely start with one, such as `retain_count`, are fine.
+- A POU must be terminated. Some exporters emit a declaration-only file that ends after the last `END_VAR` with no `END_FUNCTION_BLOCK`; that is treated as malformed, because making the terminator optional is ambiguous when several POUs share a file.
+- A keyword wins only where it is actually expected, so `SET` or `TASK` may be used as a variable name outside a property or a resource. The section qualifiers are the exception: a variable named exactly `CONSTANT`, `RETAIN`, `NON_RETAIN` or `PERSISTENT` does not parse, because that is where the qualifier belongs. Names that merely start with a keyword, such as `retain_count` or `Supervisor`, are always fine.
+- A function result cannot be subscripted directly (`f(a)[1]`), matching what vendors accept.
 
 Contributions closing any of these gaps are welcome — add corpus tests alongside the grammar change.
 

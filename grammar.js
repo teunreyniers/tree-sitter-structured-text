@@ -135,8 +135,11 @@ export default grammar({
         $.test_function_block_declaration,
         $.function_declaration,
         $.program_declaration,
-        $.method_declaration,
+        $.class_declaration,
+        $.interface_declaration,
+        $._pou_member,
         $.type_declaration,
+        $.configuration_declaration,
         // Only a global variable list stands alone as a file. Admitting every
         // section here would let a bare `VAR` open one, which collides with
         // `var` used as an ordinary identifier.
@@ -164,10 +167,13 @@ export default grammar({
     function_block_declaration: ($) =>
       seq(
         caseInsensitive("function_block"),
+        optional(field("access", $.access_specifier)),
         field("name", $.identifier),
         optional($.extends_clause),
+        optional($.implements_clause),
         repeat(field("var_section", $._var_section)),
         field("body", optional($.block)),
+        repeat(field("member", $._pou_member)),
         caseInsensitive("end_function_block")
       ),
 
@@ -178,26 +184,174 @@ export default grammar({
         caseInsensitive("test_function_block"),
         field("name", $.identifier),
         optional($.extends_clause),
+        optional($.implements_clause),
         repeat(field("var_section", $._var_section)),
         field("body", optional($.block)),
+        repeat(field("member", $._pou_member)),
         caseInsensitive("end_test_function_block")
       ),
 
+    // Methods, properties and actions may be written inside the POU they
+    // belong to, or exported one per file.
+    _pou_member: ($) =>
+      choice(
+        $.method_declaration,
+        $.property_declaration,
+        $.action_declaration
+      ),
+
+    // A single base for a class, several for an interface.
     extends_clause: ($) =>
-      seq(caseInsensitive("extends"), field("base", $.identifier)),
+      seq(
+        caseInsensitive("extends"),
+        field("base", $.identifier),
+        repeat(seq(",", field("base", $.identifier)))
+      ),
+
+    implements_clause: ($) =>
+      seq(
+        caseInsensitive("implements"),
+        field("interface", $.identifier),
+        repeat(seq(",", field("interface", $.identifier)))
+      ),
+
+    access_specifier: (_) =>
+      repeat1(
+        choice(
+          caseInsensitive("public"),
+          caseInsensitive("private"),
+          caseInsensitive("protected"),
+          caseInsensitive("internal"),
+          caseInsensitive("final"),
+          caseInsensitive("abstract")
+        )
+      ),
+
+    // A class carries no body of its own; the work lives in its methods.
+    class_declaration: ($) =>
+      seq(
+        caseInsensitive("class"),
+        optional(field("access", $.access_specifier)),
+        field("name", $.identifier),
+        optional($.extends_clause),
+        optional($.implements_clause),
+        repeat(field("var_section", $._var_section)),
+        repeat(field("member", $._pou_member)),
+        caseInsensitive("end_class")
+      ),
+
+    interface_declaration: ($) =>
+      seq(
+        caseInsensitive("interface"),
+        field("name", $.identifier),
+        optional($.extends_clause),
+        repeat(
+          field("member", choice($.method_declaration, $.property_declaration))
+        ),
+        caseInsensitive("end_interface")
+      ),
 
     // A method exported as its own file has no `END_METHOD`: the body simply
-    // runs to the end of the file.
+    // runs to the end of the file. Written inside a POU the terminator is
+    // present, and the following member or `END_FUNCTION_BLOCK` closes it
+    // either way.
     method_declaration: ($) =>
       prec.right(
         seq(
           caseInsensitive("method"),
+          optional(field("access", $.access_specifier)),
           field("name", $.identifier),
           optional(seq(":", field("return_type", $.type_name))),
           repeat(field("var_section", $._var_section)),
           field("body", optional($.block)),
           optional(caseInsensitive("end_method"))
         )
+      ),
+
+    property_declaration: ($) =>
+      seq(
+        caseInsensitive("property"),
+        optional(field("access", $.access_specifier)),
+        field("name", $.identifier),
+        optional(seq(":", field("type", $.type_name))),
+        repeat(field("accessor", choice($.get_accessor, $.set_accessor))),
+        caseInsensitive("end_property")
+      ),
+
+    get_accessor: ($) =>
+      seq(
+        caseInsensitive("get"),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_get")
+      ),
+
+    set_accessor: ($) =>
+      seq(
+        caseInsensitive("set"),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_set")
+      ),
+
+    action_declaration: ($) =>
+      seq(
+        caseInsensitive("action"),
+        field("name", $.identifier),
+        optional(":"),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_action")
+      ),
+
+    // Deployment elements: which programs run on which resource, driven by
+    // which task.
+    configuration_declaration: ($) =>
+      seq(
+        caseInsensitive("configuration"),
+        field("name", $.identifier),
+        repeat(
+          choice($._var_section, $.resource_declaration, $._resource_member)
+        ),
+        caseInsensitive("end_configuration")
+      ),
+
+    resource_declaration: ($) =>
+      seq(
+        caseInsensitive("resource"),
+        field("name", $.identifier),
+        caseInsensitive("on"),
+        field("type", $.identifier),
+        repeat(choice($._var_section, $._resource_member)),
+        caseInsensitive("end_resource")
+      ),
+
+    _resource_member: ($) =>
+      choice($.task_declaration, $.program_configuration),
+
+    task_declaration: ($) =>
+      seq(
+        caseInsensitive("task"),
+        field("name", $.identifier),
+        "(",
+        parameterList($.task_parameter),
+        ")",
+        ";"
+      ),
+
+    // `INTERVAL := t#20ms`, `PRIORITY := 1`, `SINGLE := Trigger`.
+    task_parameter: ($) =>
+      seq(field("name", $.identifier), ":=", field("value", $._expression)),
+
+    program_configuration: ($) =>
+      seq(
+        caseInsensitive("program"),
+        field("name", $.identifier),
+        optional(seq(caseInsensitive("with"), field("task", $.identifier))),
+        ":",
+        field("type", $.identifier),
+        optional(seq("(", parameterList($.param_assignment), ")")),
+        ";"
       ),
 
     function_declaration: ($) =>
@@ -216,19 +370,32 @@ export default grammar({
         field("name", $.identifier),
         repeat(field("var_section", $._var_section)),
         field("body", optional($.block)),
+        repeat(field("member", $._pou_member)),
         caseInsensitive("end_program")
       ),
 
+    // One `TYPE … END_TYPE` block may define several types.
     type_declaration: ($) =>
       seq(
         caseInsensitive("type"),
+        repeat1($.type_definition),
+        caseInsensitive("end_type")
+      ),
+
+    // A struct, an enumeration, or an alias for any other type — which covers
+    // the subrange (`INT (0..100)`) and array (`ARRAY[0..9] OF INT`) forms.
+    type_definition: ($) =>
+      seq(
         field("name", $.identifier),
         ":",
-        field("definition", choice($.struct_definition, $.enum_definition)),
-        // Vendors terminate the definition with `;` after an enumeration but
-        // not after `END_STRUCT`.
-        optional(";"),
-        caseInsensitive("end_type")
+        field(
+          "definition",
+          choice($.struct_definition, $.enum_definition, $.type_name)
+        ),
+        optional(seq(":=", field("initial_value", $._initial_value))),
+        // Vendors terminate the definition with `;` after an enumeration or an
+        // alias but not always after `END_STRUCT`.
+        optional(";")
       ),
 
     enum_definition: ($) => seq("(", commaSep1($.enum_member), ")"),
@@ -250,9 +417,10 @@ export default grammar({
       seq(
         repeat($.pragma),
         field("name", $.identifier),
+        optional(seq(caseInsensitive("at"), field("location", $.direct_address))),
         ":",
         field("type", $.type_name),
-        optional(seq(":=", field("initial_value", $._expression))),
+        optional(seq(":=", field("initial_value", $._initial_value))),
         ";"
       ),
 
@@ -267,7 +435,8 @@ export default grammar({
         $.var_temp,
         $.var_static,
         $.var_global,
-        $.var_external
+        $.var_external,
+        $.var_inst
       ),
 
     // CONSTANT / RETAIN / NON_RETAIN / PERSISTENT may follow any section
@@ -290,6 +459,7 @@ export default grammar({
     var_static: ($) => varSection($, "var_static"),
     var_global: ($) => varSection($, "var_global"),
     var_external: ($) => varSection($, "var_external"),
+    var_inst: ($) => varSection($, "var_inst"),
 
     // Comments are `extras`, so they must not be listed here: a comment
     // between the last declaration and END_VAR would otherwise be shifted
@@ -298,18 +468,66 @@ export default grammar({
       seq(
         repeat($.pragma),
         field("name", $.identifier),
+        optional(seq(caseInsensitive("at"), field("location", $.direct_address))),
         ":",
         field("type", $.type_name),
-        optional(seq(":=", field("initial_value", $._expression))),
+        optional(seq(":=", field("initial_value", $._initial_value))),
         ";"
+      ),
+
+    // A variable may be initialised with a plain expression, an array
+    // initialiser or a structure initialiser.
+    _initial_value: ($) =>
+      choice($._expression, $.array_initializer, $.structure_initializer),
+
+    // `[1, 2, 3]`, including the `n(value)` repetition form.
+    array_initializer: ($) => seq("[", commaSep1($._array_initializer_item), "]"),
+
+    _array_initializer_item: ($) =>
+      choice($.array_initializer_repetition, $._initial_value),
+
+    array_initializer_repetition: ($) =>
+      seq(
+        field("count", $.integer_literal),
+        "(",
+        commaSep1($._array_initializer_item),
+        ")"
+      ),
+
+    // `(a := 1, b := 2)`. Every element is named, which is what separates this
+    // from a parenthesized expression.
+    structure_initializer: ($) =>
+      seq("(", commaSep1($.structure_element_initializer), ")"),
+
+    structure_element_initializer: ($) =>
+      seq(
+        field("name", $.identifier),
+        ":=",
+        field("value", $._initial_value)
       ),
 
     type_name: ($) => choice(
       $.array_type,
       $.sized_type,
+      $.pointer_type,
+      $.reference_type,
       $.qualified_type_name,
       $.identifier
     ),
+
+    pointer_type: ($) =>
+      seq(
+        caseInsensitive("pointer"),
+        caseInsensitive("to"),
+        field("type", $.type_name)
+      ),
+
+    reference_type: ($) =>
+      seq(
+        caseInsensitive("reference"),
+        caseInsensitive("to"),
+        field("type", $.type_name)
+      ),
 
     // A type may be namespaced, e.g. `CmpApp.EVTPARAM_CmpApp`. Kept separate
     // from `qualified_identifier`, whose base admits indexing and dereferences
@@ -317,14 +535,15 @@ export default grammar({
     qualified_type_name: ($) =>
       seq($.identifier, repeat1(seq(".", $.identifier))),
 
-    // `STRING[512]`, `WSTRING(80)`. Modelled as a sized identifier rather than
-    // a STRING keyword so that a bare `STRING` stays an ordinary identifier.
+    // `STRING[512]`, `WSTRING(80)` and the subrange form `INT (0..100)`, which
+    // share a shape. Modelled as a sized identifier rather than a STRING
+    // keyword so that a bare `STRING` stays an ordinary identifier.
     sized_type: ($) =>
       seq(
         field("name", $.identifier),
         choice(
           seq("[", field("size", $._array_bound), "]"),
-          seq("(", field("size", $._array_bound), ")")
+          seq("(", field("size", choice($._array_bound, $.array_range)), ")")
         )
       ),
 
@@ -393,6 +612,7 @@ export default grammar({
         $.parenthesized_expression,
         $.function_call,
         $.index_expression,
+        $.direct_address,
         $.float_literal,
         $.integer_literal,
         $.string_literal,
@@ -714,7 +934,13 @@ export default grammar({
 
     // Anything that can be read from or assigned to.
     _variable: ($) =>
-      choice($.identifier, $.qualified_identifier, $.index_expression),
+      choice(
+        $.identifier,
+        $.qualified_identifier,
+        $.index_expression,
+        $.deref_expression,
+        $.direct_address
+      ),
 
     // A member may be an integer to address a single bit, e.g. `input.0`.
     // The base is not restricted to a plain identifier: `messages[i].step` and
@@ -725,16 +951,35 @@ export default grammar({
         repeat1(seq(".", choice($.identifier, $.bit_selector)))
       ),
 
-    // Tier 1 only needs `SUPER^()` and `THIS^.member`; the operand widens to any
-    // variable once pointer types are supported.
+    // `p^`, `THIS^`, `SUPER^`, and chains such as `p^^` or `arr[i]^`.
     deref_expression: ($) =>
-      seq(field("operand", choice($.this, $.super)), "^"),
+      prec.left(
+        seq(
+          field(
+            "operand",
+            choice(
+              $.this,
+              $.super,
+              $.identifier,
+              $.qualified_identifier,
+              $.index_expression,
+              $.deref_expression
+            )
+          ),
+          "^"
+        )
+      ),
 
     this: (_) => caseInsensitive("this"),
 
     super: (_) => caseInsensitive("super"),
 
     bit_selector: (_) => /[0-9]+/,
+
+    // A hardware location: `%IX0.0`, `%QW12`, `%MD100`. The size prefix is
+    // optional and `*` stands in for a location assigned by the compiler.
+    direct_address: (_) =>
+      token(/%[IQMiqm]([XBWDLxbwdl])?([0-9]+(\.[0-9]+)*|\*)/),
 
     index_expression: ($) =>
       seq(
@@ -745,11 +990,12 @@ export default grammar({
         "]"
       ),
 
-    // Assignments
+    // Assignments. `REF=` binds a reference to a variable rather than copying
+    // a value into it.
     assignment: ($) =>
       seq(
         field("identifier", $._variable),
-        ":=",
+        choice(":=", caseInsensitive("ref=")),
         field("expression", $._expression)
       ),
 
@@ -800,13 +1046,24 @@ export default grammar({
         repeat(seq(",", choice($.case_label_single, $.case_label_range)))
       ),
 
-    case_label_single: ($) => choice($.integer_literal, $.identifier),
+    case_label_single: ($) => $._case_label_value,
     case_label_range: ($) =>
-      seq(
-        choice($.integer_literal, $.identifier),
-        "..",
-        choice($.integer_literal, $.identifier)
+      seq($._case_label_value, "..", $._case_label_value),
+
+    // A label is a compile time constant: a literal, an enumerator (possibly
+    // qualified, e.g. `Color.Red`), or a boolean.
+    _case_label_value: ($) =>
+      choice(
+        $.integer_literal,
+        $.negative_integer,
+        $.identifier,
+        $.qualified_identifier,
+        $.typed_literal,
+        $.true,
+        $.false
       ),
+
+    negative_integer: ($) => seq("-", $.integer_literal),
 
     // Loops
     for_statement: ($) =>

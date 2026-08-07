@@ -1,0 +1,121 @@
+==================
+Type alias
+==================
+
+TYPE Speed : INT; END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (type_name
+        (identifier)))))
+
+==================
+Subrange type
+==================
+
+TYPE Percent : INT (0..100); END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (type_name
+        (sized_type
+          name: (identifier)
+          size: (array_range
+            start: (integer_literal)
+            end: (integer_literal)))))))
+
+==================
+Array type declaration
+==================
+
+TYPE Buffer : ARRAY [0..9] OF INT; END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (type_name
+        (array_type
+          range: (array_range
+            start: (integer_literal)
+            end: (integer_literal))
+          element_type: (type_name
+            (identifier)))))))
+
+==================
+Alias with an initial value
+==================
+
+TYPE Speed : INT := 5; END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (type_name
+        (identifier))
+      initial_value: (integer_literal))))
+
+==================
+Several types in one block
+==================
+
+TYPE
+	A : STRUCT
+		x : INT;
+	END_STRUCT
+	B : (Red, Green);
+	C : INT;
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))))
+    (type_definition
+      name: (identifier)
+      definition: (enum_definition
+        (enum_member
+          name: (identifier))
+        (enum_member
+          name: (identifier))))
+    (type_definition
+      name: (identifier)
+      definition: (type_name
+        (identifier)))))
+
+==================
+Sized string type alias
+==================
+
+TYPE Message : STRING[512]; END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (type_name
+        (sized_type
+          name: (identifier)
+          size: (integer_literal))))))

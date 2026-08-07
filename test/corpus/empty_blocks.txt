@@ -10,7 +10,7 @@ END_IF
 (source
   (block
     (if_statement
-      (identifier))))
+      condition: (identifier))))
 
 ==================
 Empty else body
@@ -26,12 +26,12 @@ END_IF
 (source
   (block
     (if_statement
-      (identifier)
-      (block
+      condition: (identifier)
+      consequence: (block
         (assignment
-          (identifier)
-          (integer_literal)))
-      (else_clause))))
+          identifier: (identifier)
+          expression: (integer_literal)))
+      alternative: (else_clause))))
 
 ==================
 Empty elsif body
@@ -47,13 +47,13 @@ END_IF
 (source
   (block
     (if_statement
-      (identifier)
-      (block
+      condition: (identifier)
+      consequence: (block
         (assignment
-          (identifier)
-          (integer_literal)))
-      (elsif_clause
-        (identifier)))))
+          identifier: (identifier)
+          expression: (integer_literal)))
+      alternative: (elsif_clause
+        condition: (identifier)))))
 
 ==================
 Empty if with a filled else
@@ -69,12 +69,12 @@ END_IF
 (source
   (block
     (if_statement
-      (identifier)
-      (else_clause
-        (block
+      condition: (identifier)
+      alternative: (else_clause
+        body: (block
           (assignment
-            (identifier)
-            (integer_literal)))))))
+            identifier: (identifier)
+            expression: (integer_literal)))))))
 
 ==================
 Empty while body
@@ -88,7 +88,7 @@ END_WHILE
 (source
   (block
     (while_statement
-      (identifier))))
+      condition: (identifier))))
 
 ==================
 Empty for body
@@ -102,9 +102,9 @@ END_FOR
 (source
   (block
     (for_statement
-      (identifier)
-      (integer_literal)
-      (integer_literal))))
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal))))
 
 ==================
 Empty repeat body
@@ -119,7 +119,7 @@ END_REPEAT
 (source
   (block
     (repeat_statement
-      (identifier))))
+      condition: (identifier))))
 
 ==================
 Empty case branch
@@ -136,20 +136,20 @@ END_CASE
 (source
   (block
     (case_statement
-      (identifier)
-      (case_body
+      value: (identifier)
+      body: (case_body
         (case_item
-          (case_label
+          label: (case_label
             (case_label_single
               (integer_literal))))
         (case_item
-          (case_label
+          label: (case_label
             (case_label_single
               (integer_literal)))
-          (block
+          body: (block
             (assignment
-              (identifier)
-              (integer_literal))))))))
+              identifier: (identifier)
+              expression: (integer_literal))))))))
 
 ==================
 Empty case else
@@ -166,16 +166,16 @@ END_CASE
 (source
   (block
     (case_statement
-      (identifier)
-      (case_body
+      value: (identifier)
+      body: (case_body
         (case_item
-          (case_label
+          label: (case_label
             (case_label_single
               (integer_literal)))
-          (block
+          body: (block
             (assignment
-              (identifier)
-              (integer_literal))))))))
+              identifier: (identifier)
+              expression: (integer_literal))))))))
 
 ==================
 Empty function block body
@@ -188,4 +188,4 @@ END_FUNCTION_BLOCK
 
 (source
   (function_block_declaration
-    (identifier)))
+    name: (identifier)))

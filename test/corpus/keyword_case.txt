@@ -16,25 +16,25 @@ End_Program
 
 (source
   (program_declaration
-    (identifier)
-    (block
+    name: (identifier)
+    body: (block
       (if_statement
-        (identifier)
-        (block
+        condition: (identifier)
+        consequence: (block
           (assignment
-            (identifier)
-            (integer_literal)))
-        (elsif_clause
-          (identifier)
-          (block
+            identifier: (identifier)
+            expression: (integer_literal)))
+        alternative: (elsif_clause
+          condition: (identifier)
+          consequence: (block
             (assignment
-              (identifier)
-              (integer_literal))))
-        (else_clause
-          (block
+              identifier: (identifier)
+              expression: (integer_literal))))
+        alternative: (else_clause
+          body: (block
             (assignment
-              (identifier)
-              (integer_literal))))))))
+              identifier: (identifier)
+              expression: (integer_literal))))))))
 
 ==================
 Mixed case boolean operators
@@ -47,15 +47,15 @@ x := a And b Or Not c Xor d;
 (source
   (block
     (assignment
-      (identifier)
-      (boolean_operator
-        (boolean_operator
-          (identifier)
-          (identifier))
-        (boolean_operator
-          (unary_expression
+      identifier: (identifier)
+      expression: (boolean_operator
+        left: (boolean_operator
+          left: (identifier)
+          right: (identifier))
+        right: (boolean_operator
+          left: (unary_expression
             (identifier))
-          (identifier))))))
+          right: (identifier))))))
 
 ==================
 Mixed case MOD
@@ -70,20 +70,20 @@ z := c Mod 2;
 (source
   (block
     (assignment
-      (identifier)
-      (binary_operator
-        (identifier)
-        (integer_literal)))
+      identifier: (identifier)
+      expression: (binary_operator
+        left: (identifier)
+        right: (integer_literal)))
     (assignment
-      (identifier)
-      (binary_operator
-        (identifier)
-        (integer_literal)))
+      identifier: (identifier)
+      expression: (binary_operator
+        left: (identifier)
+        right: (integer_literal)))
     (assignment
-      (identifier)
-      (binary_operator
-        (identifier)
-        (integer_literal)))))
+      identifier: (identifier)
+      expression: (binary_operator
+        left: (identifier)
+        right: (integer_literal)))))
 
 ==================
 Mixed case loops
@@ -107,22 +107,22 @@ End_Repeat
 (source
   (block
     (for_statement
-      (identifier)
-      (integer_literal)
-      (integer_literal)
-      (integer_literal)
-      (block
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal)
+      by: (integer_literal)
+      body: (block
         (exit)))
     (while_statement
-      (identifier)
-      (block
+      condition: (identifier)
+      body: (block
         (continue)))
     (repeat_statement
-      (block
+      body: (block
         (assignment
-          (identifier)
-          (integer_literal)))
-      (identifier))))
+          identifier: (identifier)
+          expression: (integer_literal)))
+      condition: (identifier))))
 
 ==================
 Mixed case declarations
@@ -138,13 +138,13 @@ End_Function_Block
 
 (source
   (function_block_declaration
-    (identifier)
+    name: (identifier)
     (extends_clause
-      (identifier))
-    (var_input
+      base: (identifier))
+    var_section: (var_input
       (variable_declaration
-        (identifier)
-        (type_name
+        name: (identifier)
+        type: (type_name
           (identifier))))))
 
 ==================
@@ -162,19 +162,19 @@ Ending := 4;
 (source
   (block
     (assignment
-      (qualified_identifier
+      identifier: (qualified_identifier
         (identifier)
         (identifier))
-      (true))
+      expression: (true))
     (assignment
-      (identifier)
-      (integer_literal))
+      identifier: (identifier)
+      expression: (integer_literal))
     (assignment
-      (identifier)
-      (integer_literal))
+      identifier: (identifier)
+      expression: (integer_literal))
     (assignment
-      (identifier)
-      (integer_literal))
+      identifier: (identifier)
+      expression: (integer_literal))
     (assignment
-      (identifier)
-      (integer_literal))))
+      identifier: (identifier)
+      expression: (integer_literal))))

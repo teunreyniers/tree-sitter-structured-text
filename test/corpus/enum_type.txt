@@ -14,17 +14,18 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (enum_definition
-      (enum_member
-        name: (identifier)
-        value: (integer_literal))
-      (enum_member
-        name: (identifier)
-        value: (integer_literal))
-      (enum_member
-        name: (identifier)
-        value: (integer_literal)))))
+    (type_definition
+      name: (identifier)
+      definition: (enum_definition
+        (enum_member
+          name: (identifier)
+          value: (integer_literal))
+        (enum_member
+          name: (identifier)
+          value: (integer_literal))
+        (enum_member
+          name: (identifier)
+          value: (integer_literal))))))
 
 ==================
 Enumeration without values
@@ -36,14 +37,15 @@ TYPE Color : (Red, Green, Blue); END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (enum_definition
-      (enum_member
-        name: (identifier))
-      (enum_member
-        name: (identifier))
-      (enum_member
-        name: (identifier)))))
+    (type_definition
+      name: (identifier)
+      definition: (enum_definition
+        (enum_member
+          name: (identifier))
+        (enum_member
+          name: (identifier))
+        (enum_member
+          name: (identifier))))))
 
 ==================
 Enumeration with a trailing comma
@@ -55,12 +57,13 @@ TYPE Color : (Red, Green,); END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (enum_definition
-      (enum_member
-        name: (identifier))
-      (enum_member
-        name: (identifier)))))
+    (type_definition
+      name: (identifier)
+      definition: (enum_definition
+        (enum_member
+          name: (identifier))
+        (enum_member
+          name: (identifier))))))
 
 ==================
 Struct keeps its optional terminator
@@ -76,12 +79,13 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))))))
 
 ==================
 Struct with an explicit terminator
@@ -97,9 +101,10 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))))))

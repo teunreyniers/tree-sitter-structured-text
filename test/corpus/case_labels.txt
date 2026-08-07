@@ -1,0 +1,189 @@
+==================
+Enumerated case label
+==================
+
+CASE state OF
+	Color.Red:
+		x := 1;
+	Color.Green, Color.Blue:
+		x := 2;
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (qualified_identifier
+                (identifier)
+                (identifier))))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))
+        (case_item
+          label: (case_label
+            (case_label_single
+              (qualified_identifier
+                (identifier)
+                (identifier)))
+            (case_label_single
+              (qualified_identifier
+                (identifier)
+                (identifier))))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Negative case label
+==================
+
+CASE x OF
+	-1:
+		y := 1;
+	0:
+		y := 2;
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (negative_integer
+                (integer_literal))))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal)))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Negative case range
+==================
+
+CASE x OF
+	-10..-1:
+		y := 1;
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_range
+              (negative_integer
+                (integer_literal))
+              (negative_integer
+                (integer_literal))))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Boolean case label
+==================
+
+CASE flag OF
+	TRUE:
+		y := 1;
+	FALSE:
+		y := 2;
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (true)))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))
+        (case_item
+          label: (case_label
+            (case_label_single
+              (false)))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Typed literal case label
+==================
+
+CASE x OF
+	INT#1:
+		y := 1;
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (typed_literal
+                type: (literal_type)
+                value: (integer_literal))))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Instance variable section
+==================
+
+FUNCTION_BLOCK FB
+VAR_INST
+	calls : INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var_inst
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))

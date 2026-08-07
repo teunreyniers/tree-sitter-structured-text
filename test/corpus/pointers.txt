@@ -1,0 +1,201 @@
+==================
+Pointer declaration
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	p : POINTER TO INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (pointer_type
+            type: (type_name
+              (identifier))))))))
+
+==================
+Reference declaration
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	r : REFERENCE TO MyStruct;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (reference_type
+            type: (type_name
+              (identifier))))))))
+
+==================
+Pointer to an array
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	p : POINTER TO ARRAY [0..9] OF INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (pointer_type
+            type: (type_name
+              (array_type
+                range: (array_range
+                  start: (integer_literal)
+                  end: (integer_literal))
+                element_type: (type_name
+                  (identifier))))))))))
+
+==================
+Dereference in an expression
+==================
+
+y := p^;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (deref_expression
+        operand: (identifier)))))
+
+==================
+Dereference as an assignment target
+==================
+
+p^ := 1;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (deref_expression
+        operand: (identifier))
+      expression: (integer_literal))))
+
+==================
+Dereference of a pointer to a pointer
+==================
+
+y := p^^;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (deref_expression
+        operand: (deref_expression
+          operand: (identifier))))))
+
+==================
+Dereference of an indexed element
+==================
+
+y := items[i]^;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (deref_expression
+        operand: (index_expression
+          array: (identifier)
+          index: (identifier))))))
+
+==================
+Member access through a dereferenced pointer
+==================
+
+y := p^.field;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (qualified_identifier
+        (deref_expression
+          operand: (identifier))
+        (identifier)))))
+
+==================
+Dereference of a member
+==================
+
+y := s.p^;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (deref_expression
+        operand: (qualified_identifier
+          (identifier)
+          (identifier))))))
+
+==================
+Reference assignment
+==================
+
+r REF= target;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (identifier))))
+
+==================
+Taking an address
+==================
+
+p := ADR(value);
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (function_call
+        name: (identifier)
+        (param_assignment
+          (identifier))))))

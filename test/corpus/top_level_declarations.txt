@@ -73,11 +73,12 @@ END_TYPE
   (pragma)
   (pragma)
   (type_declaration
-    name: (identifier)
-    definition: (enum_definition
-      (enum_member
-        name: (identifier)
-        value: (integer_literal)))))
+    (type_definition
+      name: (identifier)
+      definition: (enum_definition
+        (enum_member
+          name: (identifier)
+          value: (integer_literal))))))
 
 ==================
 Pragma above a function block

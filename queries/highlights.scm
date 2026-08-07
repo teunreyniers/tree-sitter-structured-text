@@ -8,6 +8,15 @@
 (program_declaration name: (identifier) @function)
 (test_function_block_declaration name: (identifier) @function)
 (method_declaration name: (identifier) @function)
+(property_declaration name: (identifier) @function)
+(action_declaration name: (identifier) @function)
+(class_declaration name: (identifier) @type)
+(interface_declaration name: (identifier) @type)
+(type_definition name: (identifier) @type)
+(configuration_declaration name: (identifier) @function)
+(resource_declaration name: (identifier) @function)
+(task_declaration name: (identifier) @function)
+(program_configuration name: (identifier) @function)
 
 ; The called member of a namespaced or method call, e.g. `FPU.IsRealNumber(x)`
 ; or `fb.Run(x)`.
@@ -30,8 +39,13 @@
 ; Enumeration members
 (enum_member name: (identifier) @constant)
 
+; Hardware locations, e.g. %IX0.0
+(direct_address) @constant.builtin
+
 ; Parameters
 (param_assignment (identifier) @variable.parameter)
+(structure_element_initializer name: (identifier) @variable.member)
+(task_parameter name: (identifier) @variable.parameter)
 
 ; Literals
 [
@@ -73,11 +87,41 @@
   "end_test_function_block"
   "method"
   "end_method"
+  "property"
+  "end_property"
+  "get"
+  "end_get"
+  "set"
+  "end_set"
+  "action"
+  "end_action"
+  "class"
+  "end_class"
+  "interface"
+  "end_interface"
   "extends"
+  "implements"
+  "public"
+  "private"
+  "protected"
+  "internal"
+  "final"
+  "abstract"
   "type"
   "end_type"
   "struct"
   "end_struct"
+  "pointer"
+  "reference"
+  "to"
+  "at"
+  "configuration"
+  "end_configuration"
+  "resource"
+  "end_resource"
+  "task"
+  "on"
+  "with"
 ] @keyword
 
 [
@@ -89,6 +133,7 @@
   "var_static"
   "var_global"
   "var_external"
+  "var_inst"
   "constant"
   "retain"
   "non_retain"
@@ -129,6 +174,7 @@
 ; Operators
 [
   ":="
+  "ref="
 ] @operator
 
 [

@@ -27,48 +27,49 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier))))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier)))))))
 
 ==================
 TYPE with STRUCT no attributes
@@ -86,20 +87,21 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier)))
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))))))
 
 ==================
 Struct field with initial value
@@ -115,13 +117,14 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))
-        initial_value: (float_literal)))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier))
+          initial_value: (float_literal))))))
 
 ==================
 Struct field with initial value and pragma
@@ -140,19 +143,20 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (comment)
-      (struct_field
-        (pragma)
-        name: (identifier)
-        type: (type_name
-          (identifier))
-        initial_value: (integer_literal))
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (comment)
+        (struct_field
+          (pragma)
+          name: (identifier)
+          type: (type_name
+            (identifier))
+          initial_value: (integer_literal))
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))))))
 
 ==================
 Struct field with typed literal initial value
@@ -169,17 +173,18 @@ END_TYPE
 
 (source
   (type_declaration
-    name: (identifier)
-    definition: (struct_definition
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))
-        initial_value: (typed_literal
-          type: (literal_type)
-          value: (integer_literal)))
-      (struct_field
-        name: (identifier)
-        type: (type_name
-          (identifier))
-        initial_value: (false)))))
+    (type_definition
+      name: (identifier)
+      definition: (struct_definition
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier))
+          initial_value: (typed_literal
+            type: (literal_type)
+            value: (integer_literal)))
+        (struct_field
+          name: (identifier)
+          type: (type_name
+            (identifier))
+          initial_value: (false))))))
