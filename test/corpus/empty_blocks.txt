@@ -1,0 +1,191 @@
+==================
+Empty if body
+==================
+
+IF x THEN
+END_IF
+
+---
+
+(source
+  (block
+    (if_statement
+      (identifier))))
+
+==================
+Empty else body
+==================
+
+IF x THEN
+	y := 1;
+ELSE
+END_IF
+
+---
+
+(source
+  (block
+    (if_statement
+      (identifier)
+      (block
+        (assignment
+          (identifier)
+          (integer_literal)))
+      (else_clause))))
+
+==================
+Empty elsif body
+==================
+
+IF x THEN
+	y := 1;
+ELSIF z THEN
+END_IF
+
+---
+
+(source
+  (block
+    (if_statement
+      (identifier)
+      (block
+        (assignment
+          (identifier)
+          (integer_literal)))
+      (elsif_clause
+        (identifier)))))
+
+==================
+Empty if with a filled else
+==================
+
+IF x THEN
+ELSE
+	y := 1;
+END_IF
+
+---
+
+(source
+  (block
+    (if_statement
+      (identifier)
+      (else_clause
+        (block
+          (assignment
+            (identifier)
+            (integer_literal)))))))
+
+==================
+Empty while body
+==================
+
+WHILE x DO
+END_WHILE
+
+---
+
+(source
+  (block
+    (while_statement
+      (identifier))))
+
+==================
+Empty for body
+==================
+
+FOR i := 0 TO 9 DO
+END_FOR
+
+---
+
+(source
+  (block
+    (for_statement
+      (identifier)
+      (integer_literal)
+      (integer_literal))))
+
+==================
+Empty repeat body
+==================
+
+REPEAT
+UNTIL x
+END_REPEAT
+
+---
+
+(source
+  (block
+    (repeat_statement
+      (identifier))))
+
+==================
+Empty case branch
+==================
+
+CASE x OF
+	1:
+	2:
+		y := 1;
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      (identifier)
+      (case_body
+        (case_item
+          (case_label
+            (case_label_single
+              (integer_literal))))
+        (case_item
+          (case_label
+            (case_label_single
+              (integer_literal)))
+          (block
+            (assignment
+              (identifier)
+              (integer_literal))))))))
+
+==================
+Empty case else
+==================
+
+CASE x OF
+	1:
+		y := 1;
+ELSE
+END_CASE
+
+---
+
+(source
+  (block
+    (case_statement
+      (identifier)
+      (case_body
+        (case_item
+          (case_label
+            (case_label_single
+              (integer_literal)))
+          (block
+            (assignment
+              (identifier)
+              (integer_literal))))))))
+
+==================
+Empty function block body
+==================
+
+FUNCTION_BLOCK FB
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    (identifier)))

@@ -1,0 +1,180 @@
+==================
+Mixed case control flow
+==================
+
+Program P
+If a Then
+	b := 1;
+ElsIf c Then
+	b := 2;
+Else
+	b := 3;
+End_If;
+End_Program
+
+---
+
+(source
+  (program_declaration
+    (identifier)
+    (block
+      (if_statement
+        (identifier)
+        (block
+          (assignment
+            (identifier)
+            (integer_literal)))
+        (elsif_clause
+          (identifier)
+          (block
+            (assignment
+              (identifier)
+              (integer_literal))))
+        (else_clause
+          (block
+            (assignment
+              (identifier)
+              (integer_literal))))))))
+
+==================
+Mixed case boolean operators
+==================
+
+x := a And b Or Not c Xor d;
+
+---
+
+(source
+  (block
+    (assignment
+      (identifier)
+      (boolean_operator
+        (boolean_operator
+          (identifier)
+          (identifier))
+        (boolean_operator
+          (unary_expression
+            (identifier))
+          (identifier))))))
+
+==================
+Mixed case MOD
+==================
+
+x := a mod 2;
+y := b MOD 2;
+z := c Mod 2;
+
+---
+
+(source
+  (block
+    (assignment
+      (identifier)
+      (binary_operator
+        (identifier)
+        (integer_literal)))
+    (assignment
+      (identifier)
+      (binary_operator
+        (identifier)
+        (integer_literal)))
+    (assignment
+      (identifier)
+      (binary_operator
+        (identifier)
+        (integer_literal)))))
+
+==================
+Mixed case loops
+==================
+
+For i := 0 To 9 By 2 Do
+	Exit;
+End_For
+
+While x Do
+	Continue;
+End_While
+
+Repeat
+	x := 1;
+Until y
+End_Repeat
+
+---
+
+(source
+  (block
+    (for_statement
+      (identifier)
+      (integer_literal)
+      (integer_literal)
+      (integer_literal)
+      (block
+        (exit)))
+    (while_statement
+      (identifier)
+      (block
+        (continue)))
+    (repeat_statement
+      (block
+        (assignment
+          (identifier)
+          (integer_literal)))
+      (identifier))))
+
+==================
+Mixed case declarations
+==================
+
+Function_Block Fb Extends Base
+Var_Input
+	x : Int;
+End_Var
+End_Function_Block
+
+---
+
+(source
+  (function_block_declaration
+    (identifier)
+    (extends_clause
+      (identifier))
+    (var_input
+      (variable_declaration
+        (identifier)
+        (type_name
+          (identifier))))))
+
+==================
+A keyword is not a prefix of a longer identifier
+==================
+
+Supervisor.Restart := TRUE;
+Ifx := 1;
+Formatter := 2;
+Variance := 3;
+Ending := 4;
+
+---
+
+(source
+  (block
+    (assignment
+      (qualified_identifier
+        (identifier)
+        (identifier))
+      (true))
+    (assignment
+      (identifier)
+      (integer_literal))
+    (assignment
+      (identifier)
+      (integer_literal))
+    (assignment
+      (identifier)
+      (integer_literal))
+    (assignment
+      (identifier)
+      (integer_literal))))

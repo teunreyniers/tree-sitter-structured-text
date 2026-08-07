@@ -217,20 +217,14 @@ b := 2;
       identifier: (identifier)
       expression: (integer_literal))))
 
-==================
+=============================================
 Simple statement still requires a semicolon
-==================
+:error
+=============================================
 
 a := 1
 b := 2;
 
 ---
 
-(source
-  (block
-    (assignment
-      (identifier)
-      (integer_literal))
-    (ERROR
-      (UNEXPECTED ' ')
-      (integer_literal))))
+(source)

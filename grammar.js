@@ -52,11 +52,18 @@ const ELEMENTARY_TYPES = [
 ];
 
 /**
+ * A keyword in any mix of cases. `IF`, `if` and `If` are all the same word to
+ * an ST compiler. The token is aliased to the lower case spelling so that
+ * queries can name it without caring how it was written, and given an explicit
+ * precedence so it outranks `identifier`, which matches the same text.
  * @param {string} keyword
- * @param {boolean} aliasAsWord
  */
-function caseInsensitive(keyword, aliasAsWord = true) {
-  return alias(choice(keyword, keyword.toUpperCase()), keyword);
+function caseInsensitive(keyword) {
+  const pattern = keyword
+    .split("")
+    .map((c) => (/[a-z]/.test(c) ? `[${c}${c.toUpperCase()}]` : c))
+    .join("");
+  return alias(token(prec(1, new RegExp(pattern))), keyword);
 }
 
 /**
@@ -105,6 +112,11 @@ export default grammar({
   // list until the token after it is seen, so the two readings of `source` stay
   // live until then.
   conflicts: ($) => [[$.block], [$._top_level_declaration, $.block]],
+
+  // Keyword extraction. Without it a keyword token can win the lexer race
+  // against a longer identifier that merely starts with it, turning
+  // `Supervisor.Restart` into `SUPER` followed by `visor`.
+  word: ($) => $.identifier,
 
   extras: ($) => [/\s/, $.comment],
 
@@ -465,7 +477,7 @@ export default grammar({
           PREC.multiply,
           seq(
             field("left", $._expression),
-            field("operator", choice("*", "/", "MOD")),
+            field("operator", choice("*", "/", caseInsensitive("mod"))),
             field("right", $._expression)
           )
         ),
@@ -747,7 +759,7 @@ export default grammar({
         caseInsensitive("if"),
         field("condition", $._expression),
         caseInsensitive("then"),
-        field("consequence", $.block),
+        field("consequence", optional($.block)),
         repeat(field("alternative", $.elsif_clause)),
         optional(field("alternative", $.else_clause)),
         caseInsensitive("end_if")
@@ -758,10 +770,11 @@ export default grammar({
         caseInsensitive("elsif"),
         field("condition", $._expression),
         caseInsensitive("then"),
-        field("consequence", $.block)
+        field("consequence", optional($.block))
       ),
 
-    else_clause: ($) => seq(caseInsensitive("else"), field("body", $.block)),
+    else_clause: ($) =>
+      seq(caseInsensitive("else"), field("body", optional($.block))),
 
     // Case
     case_statement: ($) =>
@@ -770,7 +783,7 @@ export default grammar({
         field("value", $._expression),
         caseInsensitive("of"),
         field("body", $.case_body),
-        optional(field("else", seq(caseInsensitive("else"), $.block))),
+        optional(field("else", seq(caseInsensitive("else"), optional($.block)))),
         caseInsensitive("end_case")
       ),
 
@@ -778,7 +791,7 @@ export default grammar({
 
     case_item: ($) =>
       prec.right(
-        seq(field("label", $.case_label), ":", field("body", $.block))
+        seq(field("label", $.case_label), ":", field("body", optional($.block)))
       ),
 
     case_label: ($) =>
@@ -806,7 +819,7 @@ export default grammar({
         field("end", $._expression),
         optional(seq(caseInsensitive("by"), field("by", $._expression))),
         caseInsensitive("do"),
-        field("body", $.block),
+        field("body", optional($.block)),
         caseInsensitive("end_for")
       ),
 
@@ -815,14 +828,14 @@ export default grammar({
         caseInsensitive("while"),
         field("condition", $._expression),
         caseInsensitive("do"),
-        field("body", $.block),
+        field("body", optional($.block)),
         caseInsensitive("end_while")
       ),
 
     repeat_statement: ($) =>
       seq(
         caseInsensitive("repeat"),
-        field("body", $.block),
+        field("body", optional($.block)),
         caseInsensitive("until"),
         field("condition", $._expression),
         caseInsensitive("end_repeat")
