@@ -75,6 +75,21 @@
 ] @keyword.conditional
 
 [
+  "for"
+  "to"
+  "by"
+  "do"
+  "end_for"
+  "while"
+  "end_while"
+  "repeat"
+  "until"
+  "end_repeat"
+  "exit"
+  "continue"
+] @keyword.repeat
+
+[
   "return"
 ] @keyword.return
 
@@ -122,6 +137,8 @@
 [
   "("
   ")"
+  "["
+  "]"
 ] @punctuation.bracket
 
 (pragma) @attribute

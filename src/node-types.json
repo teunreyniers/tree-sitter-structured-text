@@ -100,6 +100,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -135,6 +139,10 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
             "named": true
           },
           {
@@ -183,6 +191,10 @@
           },
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
             "named": true
           },
           {
@@ -282,6 +294,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -330,7 +346,19 @@
           "named": true
         },
         {
+          "type": "continue",
+          "named": true
+        },
+        {
+          "type": "exit",
+          "named": true
+        },
+        {
           "type": "fb_invocation",
+          "named": true
+        },
+        {
+          "type": "for_statement",
           "named": true
         },
         {
@@ -346,7 +374,15 @@
           "named": true
         },
         {
+          "type": "repeat_statement",
+          "named": true
+        },
+        {
           "type": "return",
+          "named": true
+        },
+        {
+          "type": "while_statement",
           "named": true
         }
       ]
@@ -390,6 +426,10 @@
           },
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
             "named": true
           },
           {
@@ -474,6 +514,10 @@
           },
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
             "named": true
           },
           {
@@ -671,6 +715,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -740,6 +788,10 @@
           },
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
             "named": true
           },
           {
@@ -831,6 +883,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -861,6 +917,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "continue",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "else_clause",
@@ -916,6 +977,10 @@
           },
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
             "named": true
           },
           {
@@ -1001,6 +1066,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -1081,6 +1150,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -1113,6 +1186,11 @@
     }
   },
   {
+    "type": "exit",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "false",
     "named": true,
     "fields": {}
@@ -1134,6 +1212,250 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "for_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "by": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_conversion",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "end": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_conversion",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_conversion",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      },
+      "variable": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1363,6 +1685,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -1398,6 +1724,100 @@
         "types": [
           {
             "type": "block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "index_expression",
+    "named": true,
+    "fields": {
+      "array": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          }
+        ]
+      },
+      "index": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_conversion",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           }
         ]
@@ -1447,6 +1867,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
           "named": true
         },
         {
@@ -1518,6 +1942,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
           "named": true
         },
         {
@@ -1640,6 +2068,92 @@
     }
   },
   {
+    "type": "repeat_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_conversion",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "return",
     "named": true,
     "fields": {},
@@ -1677,6 +2191,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
           "named": true
         },
         {
@@ -1849,6 +2367,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -1963,6 +2485,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
           "named": true
         },
         {
@@ -2172,6 +2698,10 @@
             "named": true
           },
           {
+            "type": "index_expression",
+            "named": true
+          },
+          {
             "type": "integer_literal",
             "named": true
           },
@@ -2235,6 +2765,92 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "while_statement",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "type_conversion",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2354,6 +2970,10 @@
     "named": false
   },
   {
+    "type": "by",
+    "named": false
+  },
+  {
     "type": "case",
     "named": false
   },
@@ -2367,8 +2987,16 @@
     "named": false
   },
   {
+    "type": "continue",
+    "named": false
+  },
+  {
     "type": "conversion_type",
     "named": true
+  },
+  {
+    "type": "do",
+    "named": false
   },
   {
     "type": "else",
@@ -2380,6 +3008,10 @@
   },
   {
     "type": "end_case",
+    "named": false
+  },
+  {
+    "type": "end_for",
     "named": false
   },
   {
@@ -2399,6 +3031,10 @@
     "named": false
   },
   {
+    "type": "end_repeat",
+    "named": false
+  },
+  {
     "type": "end_struct",
     "named": false
   },
@@ -2411,12 +3047,24 @@
     "named": false
   },
   {
+    "type": "end_while",
+    "named": false
+  },
+  {
+    "type": "exit",
+    "named": false
+  },
+  {
     "type": "false",
     "named": false
   },
   {
     "type": "float_literal",
     "named": true
+  },
+  {
+    "type": "for",
+    "named": false
   },
   {
     "type": "function",
@@ -2455,6 +3103,10 @@
     "named": false
   },
   {
+    "type": "repeat",
+    "named": false
+  },
+  {
     "type": "return",
     "named": false
   },
@@ -2471,11 +3123,19 @@
     "named": true
   },
   {
+    "type": "to",
+    "named": false
+  },
+  {
     "type": "true",
     "named": false
   },
   {
     "type": "type",
+    "named": false
+  },
+  {
+    "type": "until",
     "named": false
   },
   {
@@ -2508,6 +3168,10 @@
   },
   {
     "type": "var_temp",
+    "named": false
+  },
+  {
+    "type": "while",
     "named": false
   },
   {

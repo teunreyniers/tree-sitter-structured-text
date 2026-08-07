@@ -27,6 +27,10 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 - Assignment (`:=`), including qualified targets such as `motor.speed`
 - `IF` / `ELSIF` / `ELSE` / `END_IF`
 - `CASE` / `OF` / `ELSE` / `END_CASE`, with single labels, comma-separated labels and `1..5` ranges
+- `FOR` / `TO` / `BY` / `DO` / `END_FOR`, with an optional `BY` step and arbitrary expressions as bounds
+- `WHILE` / `DO` / `END_WHILE`
+- `REPEAT` / `UNTIL` / `END_REPEAT`
+- `EXIT` and `CONTINUE`
 - `RETURN`, with an optional value
 - Function block invocation with positional, named (`in := x`) and output (`out => y`, `NOT out => y`) parameters
 
@@ -36,6 +40,7 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 - Comparison `< <= > >=` and equality `= <>`
 - Boolean `AND`, `OR`, `XOR`, `NOT`, and unary `-`
 - Parenthesized expressions, function calls, qualified identifiers
+- Array subscripting `buffer[i]`, as an assignment target or an operand, including `m[i, j]` and `m[i][j]`
 - Type conversions matching `<TYPE>_TO_<TYPE>` (e.g. `INT_TO_REAL(x)`)
 
 **Literals**
@@ -124,19 +129,19 @@ Always re-run `tree-sitter generate` after editing `grammar.js`; the generated `
 
 The grammar covers the subset of IEC 61131-3 needed for everyday ST code. Not yet supported:
 
-- Loops: `FOR`, `WHILE`, `REPEAT`, `EXIT`, `CONTINUE`
 - String literals in expressions (the `string_literal` rule exists but is not yet reachable) and `STRING` / `WSTRING` handling
-- Array subscripting in expressions, e.g. `buffer[i] := 0;`
+- Member access after a subscript, e.g. `items[i].value` (`obj.items[i]` does parse)
 - OOP extensions: `CLASS`, `INTERFACE`, `METHOD`, `PROPERTY`, `EXTENDS`, `IMPLEMENTS`
 - `ACTION`, `CONFIGURATION`, `RESOURCE`, `TASK`, `VAR_ACCESS`
 - Direct hardware addressing such as `%IX0.0` and `AT` declarations
 - Typed literals (`INT#16`, `REAL#1.0`) and `DATE` / `TIME_OF_DAY` / `DATE_AND_TIME` literals
 - Enumerations and subrange type definitions (only `STRUCT` is parsed under `TYPE`)
 
-Two parsing caveats worth knowing:
+Three parsing caveats worth knowing:
 
 - Keywords are case-insensitive only in their all-lowercase and all-uppercase forms. `IF` and `if` parse; `If` does not.
 - `MOD` is recognised in uppercase only.
+- Statement bodies cannot be empty. `IF c THEN END_IF;` and `WHILE c DO END_WHILE;` do not parse — write a bare `;` inside.
 
 Contributions closing any of these gaps are welcome — add corpus tests alongside the grammar change.
 

@@ -1,0 +1,257 @@
+==================
+For statement
+==================
+
+for i := 1 to 10 do
+    ;
+end_for;
+
+---
+
+(source
+    (block
+    (for_statement
+        variable: (identifier)
+        start: (integer_literal)
+        end: (integer_literal)
+        body: (block
+            (noop))
+)))
+
+==================
+For statement with by
+==================
+
+for i := 1 to 10 by 2 do
+    ;
+end_for;
+
+---
+
+(source
+    (block
+    (for_statement
+        variable: (identifier)
+        start: (integer_literal)
+        end: (integer_literal)
+        by: (integer_literal)
+        body: (block
+            (noop))
+)))
+
+==================
+For statement with expression bounds
+==================
+
+for i := start to n - 1 by step do
+    ;
+end_for;
+
+---
+
+(source
+    (block
+    (for_statement
+        variable: (identifier)
+        start: (identifier)
+        end: (binary_operator
+            left: (identifier)
+            right: (integer_literal))
+        by: (identifier)
+        body: (block
+            (noop))
+)))
+
+==================
+For statement with qualified variable
+==================
+
+for obj.index := 1 to 10 do
+    ;
+end_for;
+
+---
+
+(source
+    (block
+    (for_statement
+        variable: (qualified_identifier
+            (identifier)
+            (identifier))
+        start: (integer_literal)
+        end: (integer_literal)
+        body: (block
+            (noop))
+)))
+
+==================
+While statement
+==================
+
+while a < b do
+    ;
+end_while;
+
+---
+
+(source
+    (block
+    (while_statement
+        condition: (comparison_operator
+            left: (identifier)
+            right: (identifier))
+        body: (block
+            (noop))
+)))
+
+==================
+Repeat statement
+==================
+
+repeat
+    ;
+until a > b
+end_repeat;
+
+---
+
+(source
+    (block
+    (repeat_statement
+        body: (block
+            (noop))
+        condition: (comparison_operator
+            left: (identifier)
+            right: (identifier))
+)))
+
+==================
+Exit and continue
+==================
+
+while true do
+    exit;
+    continue;
+end_while;
+
+---
+
+(source
+    (block
+    (while_statement
+        condition: (true)
+        body: (block
+            (exit)
+            (continue))
+)))
+
+==================
+Nested for in while
+==================
+
+while a do
+    for i := 1 to 10 do
+        sum := sum + i;
+    end_for;
+end_while;
+
+---
+
+(source
+    (block
+    (while_statement
+        condition: (identifier)
+        body: (block
+            (for_statement
+                variable: (identifier)
+                start: (integer_literal)
+                end: (integer_literal)
+                body: (block
+                    (assignment
+                        identifier: (identifier)
+                        expression: (binary_operator
+                            left: (identifier)
+                            right: (identifier))))))
+)))
+
+==================
+Repeat containing if
+==================
+
+repeat
+    if a then
+        exit;
+    end_if;
+until b
+end_repeat;
+
+---
+
+(source
+    (block
+    (repeat_statement
+        body: (block
+            (if_statement
+                condition: (identifier)
+                consequence: (block
+                    (exit))))
+        condition: (identifier)
+)))
+
+==================
+For upper case
+==================
+
+FOR i := 1 TO 10 BY 2 DO
+    CONTINUE;
+END_FOR;
+
+---
+
+(source
+    (block
+    (for_statement
+        variable: (identifier)
+        start: (integer_literal)
+        end: (integer_literal)
+        by: (integer_literal)
+        body: (block
+            (continue))
+)))
+
+==================
+While upper case
+==================
+
+WHILE a DO
+    EXIT;
+END_WHILE;
+
+---
+
+(source
+    (block
+    (while_statement
+        condition: (identifier)
+        body: (block
+            (exit))
+)))
+
+==================
+Repeat upper case
+==================
+
+REPEAT
+    ;
+UNTIL a
+END_REPEAT;
+
+---
+
+(source
+    (block
+    (repeat_statement
+        body: (block
+            (noop))
+        condition: (identifier)
+)))

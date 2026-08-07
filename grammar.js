@@ -228,6 +228,7 @@ export default grammar({
         $.equality_operator,
         $.parenthesized_expression,
         $.function_call,
+        $.index_expression,
         $.float_literal,
         $.integer_literal,
         $.time_literal,
@@ -421,12 +422,21 @@ export default grammar({
       choice(
         $.case_statement,
         $.if_statement,
+        $.for_statement,
+        $.while_statement,
+        $.repeat_statement,
         $.assignment,
         $.fb_invocation,
-        $.return
+        $.return,
+        $.exit,
+        $.continue
       ),
 
     return: ($) => seq(caseInsensitive("return"), optional($._expression)),
+
+    exit: (_) => caseInsensitive("exit"),
+
+    continue: (_) => caseInsensitive("continue"),
 
     fb_invocation: ($) =>
       seq(
@@ -442,10 +452,25 @@ export default grammar({
     qualified_identifier: ($) =>
       seq($.identifier, repeat1(seq(".", $.identifier))),
 
+    index_expression: ($) =>
+      seq(
+        field(
+          "array",
+          choice($.identifier, $.qualified_identifier, $.index_expression)
+        ),
+        "[",
+        field("index", $._expression),
+        repeat(seq(",", field("index", $._expression))),
+        "]"
+      ),
+
     // Assignments
     assignment: ($) =>
       seq(
-        field("identifier", choice($.identifier, $.qualified_identifier)),
+        field(
+          "identifier",
+          choice($.identifier, $.qualified_identifier, $.index_expression)
+        ),
         ":=",
         field("expression", $._expression)
       ),
@@ -502,6 +527,42 @@ export default grammar({
         choice($.integer_literal, $.identifier),
         "..",
         choice($.integer_literal, $.identifier)
+      ),
+
+    // Loops
+    for_statement: ($) =>
+      seq(
+        caseInsensitive("for"),
+        field(
+          "variable",
+          choice($.identifier, $.qualified_identifier, $.index_expression)
+        ),
+        ":=",
+        field("start", $._expression),
+        caseInsensitive("to"),
+        field("end", $._expression),
+        optional(seq(caseInsensitive("by"), field("by", $._expression))),
+        caseInsensitive("do"),
+        field("body", $.block),
+        caseInsensitive("end_for")
+      ),
+
+    while_statement: ($) =>
+      seq(
+        caseInsensitive("while"),
+        field("condition", $._expression),
+        caseInsensitive("do"),
+        field("body", $.block),
+        caseInsensitive("end_while")
+      ),
+
+    repeat_statement: ($) =>
+      seq(
+        caseInsensitive("repeat"),
+        field("body", $.block),
+        caseInsensitive("until"),
+        field("condition", $._expression),
+        caseInsensitive("end_repeat")
       ),
 
     comment: ($) =>
