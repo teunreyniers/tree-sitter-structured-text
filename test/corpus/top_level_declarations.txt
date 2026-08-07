@@ -1,0 +1,111 @@
+==================
+Global variable list
+==================
+
+VAR_GLOBAL
+	Restart : BOOL;
+END_VAR
+
+---
+
+(source
+  (var_global
+    (variable_declaration
+      name: (identifier)
+      type: (type_name
+        (identifier)))))
+
+==================
+Global variable list behind a pragma
+==================
+
+{attribute 'qualified_only'}
+VAR_GLOBAL
+	{attribute 'symbol' := 'readwrite'}
+	Restart : BOOL;
+END_VAR
+
+---
+
+(source
+  (pragma)
+  (var_global
+    (variable_declaration
+      (pragma)
+      name: (identifier)
+      type: (type_name
+        (identifier)))))
+
+==================
+Constant global variable list
+==================
+
+VAR_GLOBAL CONSTANT
+	MESSAGE_COUNT : INT := 10;
+END_VAR
+
+---
+
+(source
+  (var_global
+    qualifier: (var_qualifier)
+    (variable_declaration
+      name: (identifier)
+      type: (type_name
+        (identifier))
+      initial_value: (integer_literal))))
+
+==================
+Pragmas above a type declaration
+==================
+
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE TestState:
+(
+	NotRan := 0
+);
+END_TYPE
+
+---
+
+(source
+  (pragma)
+  (pragma)
+  (type_declaration
+    name: (identifier)
+    definition: (enum_definition
+      (enum_member
+        name: (identifier)
+        value: (integer_literal)))))
+
+==================
+Pragma above a function block
+==================
+
+{attribute 'reflection'}
+FUNCTION_BLOCK FB
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (pragma)
+  (function_block_declaration
+    name: (identifier)))
+
+==================
+Pragma inside a bare statement list
+==================
+
+{attribute 'no_check'}
+x := 1;
+
+---
+
+(source
+  (block
+    (pragma)
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))

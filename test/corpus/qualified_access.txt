@@ -1,0 +1,140 @@
+==================
+Namespaced function call
+==================
+
+IS_VALID := FPU.IsRealNumber(x);
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (function_call
+        name: (qualified_identifier
+          (identifier)
+          (identifier))
+        (param_assignment
+          (identifier))))))
+
+==================
+Method call on an instance
+==================
+
+fb.Run(x := 1);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (qualified_identifier
+        (identifier)
+        (identifier))
+      (param_assignment
+        (identifier)
+        (integer_literal)))))
+
+==================
+Method call in an expression
+==================
+
+y := fb.Compute(1) + 2;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (binary_operator
+        left: (function_call
+          name: (qualified_identifier
+            (identifier)
+            (identifier))
+          (param_assignment
+            (integer_literal)))
+        right: (integer_literal)))))
+
+==================
+Member access after indexing
+==================
+
+messages[_index].step := 0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (qualified_identifier
+        (index_expression
+          array: (identifier)
+          index: (identifier))
+        (identifier))
+      expression: (integer_literal))))
+
+==================
+Member read after indexing
+==================
+
+y := messages[_index].step;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (qualified_identifier
+        (index_expression
+          array: (identifier)
+          index: (identifier))
+        (identifier)))))
+
+==================
+Indexing after member access after indexing
+==================
+
+y := grid[i].row[j].value;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (qualified_identifier
+        (index_expression
+          array: (qualified_identifier
+            (index_expression
+              array: (identifier)
+              index: (identifier))
+            (identifier))
+          index: (identifier))
+        (identifier)))))
+
+==================
+Namespaced type in a declaration
+==================
+
+FUNCTION PlcStart : DWORD
+VAR_IN_OUT
+	EventPrm: CmpApp.EVTPARAM_CmpApp;
+END_VAR
+END_FUNCTION
+
+---
+
+(source
+  (function_declaration
+    name: (identifier)
+    return_type: (type_name
+      (identifier))
+    var_section: (var_in_out
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (qualified_type_name
+            (identifier)
+            (identifier)))))))

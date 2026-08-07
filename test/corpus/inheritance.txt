@@ -1,0 +1,135 @@
+==================
+Function block extending a base
+==================
+
+FUNCTION_BLOCK Test_Mode0 EXTENDS BaseTest
+x := 1;
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (integer_literal)))))
+
+==================
+Test function block extending a base
+==================
+
+TEST_FUNCTION_BLOCK Test_Mode0 EXTENDS BaseTest
+END_TEST_FUNCTION_BLOCK
+
+---
+
+(source
+  (test_function_block_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier))))
+
+==================
+Extending with declarations and a body
+==================
+
+FUNCTION_BLOCK Group_ValveManual EXTENDS TestGroup
+VAR
+	Test_Mode0: Test_ValveManual_Mode0;
+END_VAR
+	Test_Mode0(Restart := Restart);
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier))
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    body: (block
+      (fb_invocation
+        (identifier)
+        (param_assignment
+          (identifier)
+          (identifier))))))
+
+==================
+Calling the base implementation
+==================
+
+FUNCTION_BLOCK Test_Mode0 EXTENDS BaseTest
+SUPER^();
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    (extends_clause
+      base: (identifier))
+    body: (block
+      (fb_invocation
+        (deref_expression
+          operand: (super))))))
+
+==================
+Member access through THIS
+==================
+
+FUNCTION_BLOCK FB
+x := THIS^.state;
+THIS^.count := 0;
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (qualified_identifier
+          (deref_expression
+            operand: (this))
+          (identifier)))
+      (assignment
+        identifier: (qualified_identifier
+          (deref_expression
+            operand: (this))
+          (identifier))
+        expression: (integer_literal)))))
+
+==================
+Calling a method on THIS
+==================
+
+FUNCTION_BLOCK FB
+THIS^.Reset(value := 0);
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    body: (block
+      (fb_invocation
+        (qualified_identifier
+          (deref_expression
+            operand: (this))
+          (identifier))
+        (param_assignment
+          (identifier)
+          (integer_literal))))))

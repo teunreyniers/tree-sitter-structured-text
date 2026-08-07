@@ -77,6 +77,14 @@ function parameterList(param) {
 }
 
 /**
+ * One or more comma separated items, allowing a trailing comma.
+ * @param {any} item
+ */
+function commaSep1(item) {
+  return seq(item, repeat(seq(",", item)), optional(","));
+}
+
+/**
  * A `VAR…END_VAR` section with an optional qualifier.
  * @param {any} $
  * @param {string} keyword
@@ -93,15 +101,36 @@ function varSection($, keyword) {
 export default grammar({
   name: "structured_text",
 
-  conflicts: ($) => [[$.block]],
+  // A leading pragma cannot be attributed to a declaration or to a statement
+  // list until the token after it is seen, so the two readings of `source` stay
+  // live until then.
+  conflicts: ($) => [[$.block], [$._top_level_declaration, $.block]],
 
   extras: ($) => [/\s/, $.comment],
 
   rules: {
     source: ($) => choice(
-      repeat1(choice($.function_block_declaration, $.test_function_block_declaration, $.function_declaration, $.program_declaration, $.type_declaration)),
+      repeat1($._top_level_declaration),
       $.block
     ),
+
+    // A file holds either declarations or a bare statement list. Vendors export
+    // one POU per file, so a lone `METHOD`, a global variable list, or a leading
+    // pragma are all whole files in practice.
+    _top_level_declaration: ($) =>
+      choice(
+        $.function_block_declaration,
+        $.test_function_block_declaration,
+        $.function_declaration,
+        $.program_declaration,
+        $.method_declaration,
+        $.type_declaration,
+        // Only a global variable list stands alone as a file. Admitting every
+        // section here would let a bare `VAR` open one, which collides with
+        // `var` used as an ordinary identifier.
+        $.var_global,
+        $.pragma
+      ),
 
     // A simple statement is always terminated by `;`. After a compound
     // statement the terminator is optional, which is what most vendors accept
@@ -124,6 +153,7 @@ export default grammar({
       seq(
         caseInsensitive("function_block"),
         field("name", $.identifier),
+        optional($.extends_clause),
         repeat(field("var_section", $._var_section)),
         field("body", optional($.block)),
         caseInsensitive("end_function_block")
@@ -135,9 +165,27 @@ export default grammar({
       seq(
         caseInsensitive("test_function_block"),
         field("name", $.identifier),
+        optional($.extends_clause),
         repeat(field("var_section", $._var_section)),
         field("body", optional($.block)),
         caseInsensitive("end_test_function_block")
+      ),
+
+    extends_clause: ($) =>
+      seq(caseInsensitive("extends"), field("base", $.identifier)),
+
+    // A method exported as its own file has no `END_METHOD`: the body simply
+    // runs to the end of the file.
+    method_declaration: ($) =>
+      prec.right(
+        seq(
+          caseInsensitive("method"),
+          field("name", $.identifier),
+          optional(seq(":", field("return_type", $.type_name))),
+          repeat(field("var_section", $._var_section)),
+          field("body", optional($.block)),
+          optional(caseInsensitive("end_method"))
+        )
       ),
 
     function_declaration: ($) =>
@@ -164,8 +212,19 @@ export default grammar({
         caseInsensitive("type"),
         field("name", $.identifier),
         ":",
-        field("definition", $.struct_definition),
+        field("definition", choice($.struct_definition, $.enum_definition)),
+        // Vendors terminate the definition with `;` after an enumeration but
+        // not after `END_STRUCT`.
+        optional(";"),
         caseInsensitive("end_type")
+      ),
+
+    enum_definition: ($) => seq("(", commaSep1($.enum_member), ")"),
+
+    enum_member: ($) =>
+      seq(
+        field("name", $.identifier),
+        optional(seq(":=", field("value", $._expression)))
       ),
 
     struct_definition: ($) =>
@@ -235,8 +294,27 @@ export default grammar({
 
     type_name: ($) => choice(
       $.array_type,
+      $.sized_type,
+      $.qualified_type_name,
       $.identifier
     ),
+
+    // A type may be namespaced, e.g. `CmpApp.EVTPARAM_CmpApp`. Kept separate
+    // from `qualified_identifier`, whose base admits indexing and dereferences
+    // that have no meaning in a type position.
+    qualified_type_name: ($) =>
+      seq($.identifier, repeat1(seq(".", $.identifier))),
+
+    // `STRING[512]`, `WSTRING(80)`. Modelled as a sized identifier rather than
+    // a STRING keyword so that a bare `STRING` stays an ordinary identifier.
+    sized_type: ($) =>
+      seq(
+        field("name", $.identifier),
+        choice(
+          seq("[", field("size", $._array_bound), "]"),
+          seq("(", field("size", $._array_bound), ")")
+        )
+      ),
 
     array_type: ($) =>
       seq(
@@ -294,6 +372,7 @@ export default grammar({
       choice(
         $.qualified_identifier,
         $.identifier,
+        $.deref_expression,
         $.unary_expression,
         $.binary_operator,
         $.boolean_operator,
@@ -316,11 +395,16 @@ export default grammar({
 
     function_call: ($) =>
       seq(
-        field("name", $.identifier),
+        field("name", $._callable),
         "(",
         parameterList($.param_assignment),
         ")"
       ),
+
+    // A call target may be namespaced (`FPU.IsRealNumber`), a method on an
+    // instance (`fb.Run`), or the base implementation (`SUPER^`).
+    _callable: ($) =>
+      choice($.identifier, $.qualified_identifier, $.deref_expression),
 
     param_assignment: ($) =>
       choice(
@@ -329,10 +413,7 @@ export default grammar({
           optional(caseInsensitive("not")),
           $.identifier,
           "=>",
-          field(
-            "target",
-            choice($.identifier, $.qualified_identifier, $.index_expression)
-          )
+          field("target", $._variable)
         )
       ),
 
@@ -614,26 +695,38 @@ export default grammar({
     continue: (_) => caseInsensitive("continue"),
 
     fb_invocation: ($) =>
-      seq($.identifier, "(", parameterList($.param_assignment), ")"),
+      seq($._callable, "(", parameterList($.param_assignment), ")"),
 
     // Variables
     identifier: (_) => /[_a-zA-Z][_a-zA-Z0-9]*/,
 
+    // Anything that can be read from or assigned to.
+    _variable: ($) =>
+      choice($.identifier, $.qualified_identifier, $.index_expression),
+
     // A member may be an integer to address a single bit, e.g. `input.0`.
+    // The base is not restricted to a plain identifier: `messages[i].step` and
+    // `THIS^.state` both start a member chain.
     qualified_identifier: ($) =>
       seq(
-        $.identifier,
+        choice($.identifier, $.index_expression, $.deref_expression),
         repeat1(seq(".", choice($.identifier, $.bit_selector)))
       ),
+
+    // Tier 1 only needs `SUPER^()` and `THIS^.member`; the operand widens to any
+    // variable once pointer types are supported.
+    deref_expression: ($) =>
+      seq(field("operand", choice($.this, $.super)), "^"),
+
+    this: (_) => caseInsensitive("this"),
+
+    super: (_) => caseInsensitive("super"),
 
     bit_selector: (_) => /[0-9]+/,
 
     index_expression: ($) =>
       seq(
-        field(
-          "array",
-          choice($.identifier, $.qualified_identifier, $.index_expression)
-        ),
+        field("array", $._variable),
         "[",
         field("index", $._expression),
         repeat(seq(",", field("index", $._expression))),
@@ -643,10 +736,7 @@ export default grammar({
     // Assignments
     assignment: ($) =>
       seq(
-        field(
-          "identifier",
-          choice($.identifier, $.qualified_identifier, $.index_expression)
-        ),
+        field("identifier", $._variable),
         ":=",
         field("expression", $._expression)
       ),
@@ -709,10 +799,7 @@ export default grammar({
     for_statement: ($) =>
       seq(
         caseInsensitive("for"),
-        field(
-          "variable",
-          choice($.identifier, $.qualified_identifier, $.index_expression)
-        ),
+        field("variable", $._variable),
         ":=",
         field("start", $._expression),
         caseInsensitive("to"),

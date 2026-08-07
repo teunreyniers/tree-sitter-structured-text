@@ -7,6 +7,12 @@
 (function_block_declaration name: (identifier) @function)
 (program_declaration name: (identifier) @function)
 (test_function_block_declaration name: (identifier) @function)
+(method_declaration name: (identifier) @function)
+
+; The called member of a namespaced or method call, e.g. `FPU.IsRealNumber(x)`
+; or `fb.Run(x)`.
+(function_call name: (qualified_identifier (identifier) @function.call .))
+(fb_invocation (qualified_identifier (identifier) @function.call .))
 
 ; Type conversion, e.g. UDINT_TO_TIME(x)
 ((function_call name: (identifier) @function.builtin)
@@ -15,6 +21,14 @@
 ; Variables
 (identifier) @variable
 (qualified_identifier) @variable
+
+[
+  (this)
+  (super)
+] @variable.builtin
+
+; Enumeration members
+(enum_member name: (identifier) @constant)
 
 ; Parameters
 (param_assignment (identifier) @variable.parameter)
@@ -57,6 +71,9 @@
   "end_program"
   "test_function_block"
   "end_test_function_block"
+  "method"
+  "end_method"
+  "extends"
   "type"
   "end_type"
   "struct"
@@ -121,6 +138,7 @@
   "**"
   "/"
   "MOD"
+  "^"
 ] @operator
 
 [

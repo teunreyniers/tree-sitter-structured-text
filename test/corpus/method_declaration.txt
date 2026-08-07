@@ -1,0 +1,102 @@
+==================
+Method exported as its own file
+==================
+
+METHOD AssertTrue : BOOL
+VAR_INPUT
+	in : BOOL;
+END_VAR
+
+IF NOT in THEN
+	_error := TRUE;
+END_IF;
+
+---
+
+(source
+  (method_declaration
+    name: (identifier)
+    return_type: (type_name
+      (identifier))
+    var_section: (var_input
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    body: (block
+      (if_statement
+        condition: (unary_expression
+          (identifier))
+        consequence: (block
+          (assignment
+            identifier: (identifier)
+            expression: (true)))))))
+
+==================
+Method without a return type
+==================
+
+METHOD SetMessage
+VAR_INPUT
+	message : STRING[512];
+END_VAR
+_message := message;
+
+---
+
+(source
+  (method_declaration
+    name: (identifier)
+    var_section: (var_input
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (sized_type
+            name: (identifier)
+            size: (integer_literal)))))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (identifier)))))
+
+==================
+Method with an explicit terminator
+==================
+
+METHOD Init : BOOL
+Init := TRUE;
+END_METHOD
+
+---
+
+(source
+  (method_declaration
+    name: (identifier)
+    return_type: (type_name
+      (identifier))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (true)))))
+
+==================
+Method with no body
+==================
+
+METHOD Done : BOOL
+VAR_INPUT
+	ok : BOOL;
+END_VAR
+
+---
+
+(source
+  (method_declaration
+    name: (identifier)
+    return_type: (type_name
+      (identifier))
+    var_section: (var_input
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))

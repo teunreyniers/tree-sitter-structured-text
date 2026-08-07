@@ -224,6 +224,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -331,6 +335,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -447,6 +455,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -601,6 +613,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -702,6 +718,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -919,6 +939,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -1008,6 +1032,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -1119,6 +1147,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -1188,6 +1220,26 @@
     "fields": {}
   },
   {
+    "type": "deref_expression",
+    "named": true,
+    "fields": {
+      "operand": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "super",
+            "named": true
+          },
+          {
+            "type": "this",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "else_clause",
     "named": true,
     "fields": {
@@ -1229,6 +1281,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -1306,6 +1362,127 @@
     }
   },
   {
+    "type": "enum_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "enum_member",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "enum_member",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binary_operator",
+            "named": true
+          },
+          {
+            "type": "boolean_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          },
+          {
+            "type": "date_and_time_literal",
+            "named": true
+          },
+          {
+            "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
+            "type": "equality_operator",
+            "named": true
+          },
+          {
+            "type": "false",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "function_call",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "time_literal",
+            "named": true
+          },
+          {
+            "type": "time_of_day_literal",
+            "named": true
+          },
+          {
+            "type": "true",
+            "named": true
+          },
+          {
+            "type": "typed_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "equality_operator",
     "named": true,
     "fields": {
@@ -1331,6 +1508,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -1434,6 +1615,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -1503,6 +1688,22 @@
     "fields": {}
   },
   {
+    "type": "extends_clause",
+    "named": true,
+    "fields": {
+      "base": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "false",
     "named": true,
     "fields": {}
@@ -1516,11 +1717,19 @@
       "required": true,
       "types": [
         {
+          "type": "deref_expression",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
           "type": "param_assignment",
+          "named": true
+        },
+        {
+          "type": "qualified_identifier",
           "named": true
         }
       ]
@@ -1562,6 +1771,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -1651,6 +1864,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -1734,6 +1951,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -1880,6 +2101,16 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "extends_clause",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1891,7 +2122,15 @@
         "required": true,
         "types": [
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
             "named": true
           }
         ]
@@ -2025,6 +2264,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -2145,6 +2388,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -2209,6 +2456,80 @@
     }
   },
   {
+    "type": "method_declaration",
+    "named": true,
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      },
+      "var_section": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "var",
+            "named": true
+          },
+          {
+            "type": "var_external",
+            "named": true
+          },
+          {
+            "type": "var_global",
+            "named": true
+          },
+          {
+            "type": "var_in_out",
+            "named": true
+          },
+          {
+            "type": "var_input",
+            "named": true
+          },
+          {
+            "type": "var_output",
+            "named": true
+          },
+          {
+            "type": "var_static",
+            "named": true
+          },
+          {
+            "type": "var_temp",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "noop",
     "named": true,
     "fields": {}
@@ -2258,6 +2579,10 @@
         },
         {
           "type": "date_literal",
+          "named": true
+        },
+        {
+          "type": "deref_expression",
           "named": true
         },
         {
@@ -2349,6 +2674,10 @@
         },
         {
           "type": "date_literal",
+          "named": true
+        },
+        {
+          "type": "deref_expression",
           "named": true
         },
         {
@@ -2496,6 +2825,29 @@
           "named": true
         },
         {
+          "type": "deref_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "qualified_type_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
           "type": "identifier",
           "named": true
         }
@@ -2538,6 +2890,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -2633,6 +2989,10 @@
           "named": true
         },
         {
+          "type": "deref_expression",
+          "named": true
+        },
+        {
           "type": "equality_operator",
           "named": true
         },
@@ -2696,6 +3056,44 @@
     }
   },
   {
+    "type": "sized_type",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "size": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "array_bound_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "integer_literal",
+            "named": true
+          },
+          {
+            "type": "qualified_identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "source",
     "named": true,
     "root": true,
@@ -2717,6 +3115,14 @@
           "named": true
         },
         {
+          "type": "method_declaration",
+          "named": true
+        },
+        {
+          "type": "pragma",
+          "named": true
+        },
+        {
           "type": "program_declaration",
           "named": true
         },
@@ -2726,6 +3132,10 @@
         },
         {
           "type": "type_declaration",
+          "named": true
+        },
+        {
+          "type": "var_global",
           "named": true
         }
       ]
@@ -2772,6 +3182,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -2869,6 +3283,11 @@
     }
   },
   {
+    "type": "super",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "test_function_block_declaration",
     "named": true,
     "fields": {
@@ -2930,7 +3349,22 @@
           }
         ]
       }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "extends_clause",
+          "named": true
+        }
+      ]
     }
+  },
+  {
+    "type": "this",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "true",
@@ -2945,6 +3379,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "enum_definition",
+            "named": true
+          },
           {
             "type": "struct_definition",
             "named": true
@@ -2977,6 +3415,14 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "qualified_type_name",
+          "named": true
+        },
+        {
+          "type": "sized_type",
           "named": true
         }
       ]
@@ -3050,6 +3496,10 @@
         },
         {
           "type": "date_literal",
+          "named": true
+        },
+        {
+          "type": "deref_expression",
           "named": true
         },
         {
@@ -3357,6 +3807,10 @@
             "named": true
           },
           {
+            "type": "deref_expression",
+            "named": true
+          },
+          {
             "type": "equality_operator",
             "named": true
           },
@@ -3486,6 +3940,10 @@
           },
           {
             "type": "date_literal",
+            "named": true
+          },
+          {
+            "type": "deref_expression",
             "named": true
           },
           {
@@ -3661,6 +4119,10 @@
     "named": false
   },
   {
+    "type": "^",
+    "named": false
+  },
+  {
     "type": "and",
     "named": false
   },
@@ -3734,6 +4196,10 @@
     "named": false
   },
   {
+    "type": "end_method",
+    "named": false
+  },
+  {
     "type": "end_program",
     "named": false
   },
@@ -3763,6 +4229,10 @@
   },
   {
     "type": "exit",
+    "named": false
+  },
+  {
+    "type": "extends",
     "named": false
   },
   {
@@ -3800,6 +4270,10 @@
   {
     "type": "literal_type",
     "named": true
+  },
+  {
+    "type": "method",
+    "named": false
   },
   {
     "type": "mod",
@@ -3850,11 +4324,19 @@
     "named": false
   },
   {
+    "type": "super",
+    "named": false
+  },
+  {
     "type": "test_function_block",
     "named": false
   },
   {
     "type": "then",
+    "named": false
+  },
+  {
+    "type": "this",
     "named": false
   },
   {

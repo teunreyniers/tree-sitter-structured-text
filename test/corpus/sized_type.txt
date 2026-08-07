@@ -1,0 +1,142 @@
+==================
+String with a bracketed length
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	message : STRING[512];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (sized_type
+            name: (identifier)
+            size: (integer_literal)))))))
+
+==================
+String with a parenthesised length
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	message : STRING(80);
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (sized_type
+            name: (identifier)
+            size: (integer_literal)))))))
+
+==================
+Length given by a constant
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	message : STRING[MESSAGE_COUNT];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (sized_type
+            name: (identifier)
+            size: (identifier)))))))
+
+==================
+Length given by an expression
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	message : STRING[MAX_LEN + 1];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (sized_type
+            name: (identifier)
+            size: (array_bound_expression
+              left: (identifier)
+              right: (integer_literal))))))))
+
+==================
+Sized element type in an array
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	messages : ARRAY [0..9] OF STRING[512];
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (integer_literal))
+            element_type: (type_name
+              (sized_type
+                name: (identifier)
+                size: (integer_literal)))))))))
+
+==================
+Bare STRING stays an identifier
+==================
+
+FUNCTION_BLOCK FB
+VAR
+	message : STRING;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
