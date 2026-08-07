@@ -5,6 +5,12 @@
 //!
 //! ```
 //! let code = r#"
+//! FUNCTION_BLOCK counter
+//! VAR
+//!     count: INT := 0;
+//! END_VAR
+//!     count := count + 1;
+//! END_FUNCTION_BLOCK
 //! "#;
 //! let mut parser = tree_sitter::Parser::new();
 //! let language = tree_sitter_structured_text::LANGUAGE;
@@ -15,7 +21,7 @@
 //! assert!(!tree.root_node().has_error());
 //! ```
 //!
-//! [`Parser`]: https://docs.rs/tree-sitter/0.26.5/tree_sitter/struct.Parser.html
+//! [`Parser`]: https://docs.rs/tree-sitter/0.26.11/tree_sitter/struct.Parser.html
 //! [tree-sitter]: https://tree-sitter.github.io/
 
 use tree_sitter_language::LanguageFn;
