@@ -1,0 +1,100 @@
+==================
+Bit access on the right hand side
+==================
+
+wago_8di.position1 := input.0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (qualified_identifier
+        (identifier)
+        (identifier))
+      expression: (qualified_identifier
+        (identifier)
+        (bit_selector)))))
+
+==================
+Bit access as assignment target
+==================
+
+output.0 := wago_8do.position1;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (qualified_identifier
+        (identifier)
+        (bit_selector))
+      expression: (qualified_identifier
+        (identifier)
+        (identifier)))))
+
+==================
+Bit access on a qualified identifier
+==================
+
+status.ready_for_switching_on := pzd_zsw1.0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (qualified_identifier
+        (identifier)
+        (identifier))
+      expression: (qualified_identifier
+        (identifier)
+        (bit_selector)))))
+
+==================
+Bit access with a multi digit index
+==================
+
+var := input.15;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (qualified_identifier
+        (identifier)
+        (bit_selector)))))
+
+==================
+Bit access does not swallow float literals
+==================
+
+var := 100.0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (float_literal))))
+
+==================
+Bit access mixed with member access
+==================
+
+var := drive.status.3;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (qualified_identifier
+        (identifier)
+        (identifier)
+        (bit_selector)))))

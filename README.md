@@ -11,20 +11,24 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 - `FUNCTION_BLOCK` / `END_FUNCTION_BLOCK`
 - `FUNCTION` / `END_FUNCTION`, with optional return type
 - `PROGRAM` / `END_PROGRAM`
-- `TYPE` / `END_TYPE` with `STRUCT` definitions
+- `TEST_FUNCTION_BLOCK` / `END_TEST_FUNCTION_BLOCK`, as used by ST unit-test frameworks
+- `TYPE` / `END_TYPE` with `STRUCT` definitions, including per-field initial values
 
 **Variable sections**
 
-`VAR`, `VAR CONSTANT`, `VAR_INPUT`, `VAR_OUTPUT`, `VAR_IN_OUT`, `VAR_TEMP`, `VAR_STATIC`, `VAR_GLOBAL`, `VAR_EXTERNAL` — each terminated by `END_VAR`, with optional initial values.
+`VAR`, `VAR_INPUT`, `VAR_OUTPUT`, `VAR_IN_OUT`, `VAR_TEMP`, `VAR_STATIC`, `VAR_GLOBAL`, `VAR_EXTERNAL` — each terminated by `END_VAR`, with optional initial values.
+
+Any section may carry the qualifiers `CONSTANT`, `RETAIN`, `NON_RETAIN` and `PERSISTENT`, alone or combined (`VAR RETAIN PERSISTENT`).
 
 **Types**
 
 - Simple type names
-- Multi-dimensional `ARRAY [1..10, 0..3] OF <type>`, including nested arrays and identifier bounds
+- Multi-dimensional `ARRAY [1..10, 0..3] OF <type>`, including nested arrays, identifier bounds and arithmetic bounds such as `[0..MAX_DEVICES - 1]`
 
 **Statements**
 
 - Assignment (`:=`), including qualified targets such as `motor.speed`
+- The `;` after a compound statement is optional, so `END_IF` may close a statement on its own; simple statements still require it
 - `IF` / `ELSIF` / `ELSE` / `END_IF`
 - `CASE` / `OF` / `ELSE` / `END_CASE`, with single labels, comma-separated labels and `1..5` ranges
 - `FOR` / `TO` / `BY` / `DO` / `END_FOR`, with an optional `BY` step and arbitrary expressions as bounds
@@ -32,7 +36,7 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 - `REPEAT` / `UNTIL` / `END_REPEAT`
 - `EXIT` and `CONTINUE`
 - `RETURN`, with an optional value
-- Function block invocation with positional, named (`in := x`) and output (`out => y`, `NOT out => y`) parameters
+- Function block invocation with positional, named (`in := x`) and output (`out => y`, `NOT out => y`) parameters. Output parameters may target a qualified name or an array element (`out => module.state`), and the parameter list may carry a trailing comma
 
 **Expressions**
 
@@ -41,18 +45,22 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 - Boolean `AND`, `OR`, `XOR`, `NOT`, and unary `-`
 - Parenthesized expressions, function calls, qualified identifiers
 - Array subscripting `buffer[i]`, as an assignment target or an operand, including `m[i, j]` and `m[i][j]`
-- Type conversions matching `<TYPE>_TO_<TYPE>` (e.g. `INT_TO_REAL(x)`)
+- Single-bit access `input.0`, as an assignment target or an operand
+- Type conversions such as `INT_TO_REAL(x)`, parsed as ordinary function calls
 
 **Literals**
 
 - Integers, including based literals `2#1010`, `8#777`, `16#FF` and `_` digit separators
 - Floats with exponents
+- Strings `'text'` and `"wide text"`, including the `$` escape and the empty string
 - `TRUE` / `FALSE` (also `true`/`false` and `True`/`False`)
-- Duration literals `T#1d2h3m4s500ms`, down to millisecond resolution
+- Typed literals `DINT#0`, `WORD#16#FFF0`, `REAL#0.0`, `BOOL#TRUE`
+- Duration literals `T#1d2h3m4s500ms` (also `TIME#`, `LT#`, `LTIME#`), down to millisecond resolution
+- `D#2026-07-31`, `TOD#12:30:00.5` and `DT#2026-07-31-12:30:00`, and their `DATE#` / `TIME_OF_DAY#` / `DATE_AND_TIME#` long forms
 
 **Other**
 
-- Line comments `// ...` and block comments `(* ... *)`
+- Line comments `// ...` and block comments `(* ... *)`, in any position including immediately before `END_VAR`
 - Pragmas / attributes `{ ... }` before variable declarations and struct fields
 - Syntax highlighting queries in [`queries/highlights.scm`](queries/highlights.scm)
 
@@ -129,19 +137,19 @@ Always re-run `tree-sitter generate` after editing `grammar.js`; the generated `
 
 The grammar covers the subset of IEC 61131-3 needed for everyday ST code. Not yet supported:
 
-- String literals in expressions (the `string_literal` rule exists but is not yet reachable) and `STRING` / `WSTRING` handling
 - Member access after a subscript, e.g. `items[i].value` (`obj.items[i]` does parse)
 - OOP extensions: `CLASS`, `INTERFACE`, `METHOD`, `PROPERTY`, `EXTENDS`, `IMPLEMENTS`
 - `ACTION`, `CONFIGURATION`, `RESOURCE`, `TASK`, `VAR_ACCESS`
 - Direct hardware addressing such as `%IX0.0` and `AT` declarations
-- Typed literals (`INT#16`, `REAL#1.0`) and `DATE` / `TIME_OF_DAY` / `DATE_AND_TIME` literals
+- Sized `STRING[80]` declarations
 - Enumerations and subrange type definitions (only `STRUCT` is parsed under `TYPE`)
 
-Three parsing caveats worth knowing:
+Four parsing caveats worth knowing:
 
 - Keywords are case-insensitive only in their all-lowercase and all-uppercase forms. `IF` and `if` parse; `If` does not.
 - `MOD` is recognised in uppercase only.
 - Statement bodies cannot be empty. `IF c THEN END_IF;` and `WHILE c DO END_WHILE;` do not parse — write a bare `;` inside.
+- The section qualifiers are reserved: a variable named exactly `CONSTANT`, `RETAIN`, `NON_RETAIN` or `PERSISTENT` does not parse. Names that merely start with one, such as `retain_count`, are fine.
 
 Contributions closing any of these gaps are welcome — add corpus tests alongside the grammar change.
 

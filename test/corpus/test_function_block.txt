@@ -1,0 +1,116 @@
+==================
+Empty test function block
+==================
+
+TEST_FUNCTION_BLOCK TEST_RAMP_INIT
+END_TEST_FUNCTION_BLOCK
+
+---
+
+(source
+  (test_function_block_declaration
+    name: (identifier)))
+
+==================
+Test function block with vars and body
+==================
+
+TEST_FUNCTION_BLOCK TEST_RAMP_INIT_SNAPS_TO_INPUT
+
+VAR
+  fb: ramp;
+END_VAR
+
+fb(input := 75.0, rate_up := 1.0);
+
+ASSERT_TRUE(IN := fb.output = 75.0);
+
+END_TEST_FUNCTION_BLOCK
+
+---
+
+(source
+  (test_function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    body: (block
+      (fb_invocation
+        (identifier)
+        (param_assignment
+          (identifier)
+          (float_literal))
+        (param_assignment
+          (identifier)
+          (float_literal)))
+      (fb_invocation
+        (identifier)
+        (param_assignment
+          (identifier)
+          (equality_operator
+            left: (qualified_identifier
+              (identifier)
+              (identifier))
+            right: (float_literal)))))))
+
+==================
+Multiple test function blocks in one file
+==================
+
+TEST_FUNCTION_BLOCK TEST_ONE
+a := 1;
+END_TEST_FUNCTION_BLOCK
+
+TEST_FUNCTION_BLOCK TEST_TWO
+b := 2;
+END_TEST_FUNCTION_BLOCK
+
+---
+
+(source
+  (test_function_block_declaration
+    name: (identifier)
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (integer_literal))))
+  (test_function_block_declaration
+    name: (identifier)
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (integer_literal)))))
+
+==================
+Test function block mixed with regular POUs
+==================
+
+FUNCTION_BLOCK ramp
+END_FUNCTION_BLOCK
+
+TEST_FUNCTION_BLOCK TEST_RAMP
+END_TEST_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier))
+  (test_function_block_declaration
+    name: (identifier)))
+
+==================
+Lowercase test function block
+==================
+
+test_function_block test_lower
+end_test_function_block
+
+---
+
+(source
+  (test_function_block_declaration
+    name: (identifier)))

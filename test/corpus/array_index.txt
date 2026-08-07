@@ -7,13 +7,12 @@ buffer[i] := 0;
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (index_expression
-            array: (identifier)
-            index: (identifier))
-        expression: (integer_literal)
-)))
+      identifier: (index_expression
+        array: (identifier)
+        index: (identifier))
+      expression: (integer_literal))))
 
 ==================
 Array index in expression
@@ -24,15 +23,14 @@ x := buffer[i + 1];
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (identifier)
-        expression: (index_expression
-            array: (identifier)
-            index: (binary_operator
-                left: (identifier)
-                right: (integer_literal)))
-)))
+      identifier: (identifier)
+      expression: (index_expression
+        array: (identifier)
+        index: (binary_operator
+          left: (identifier)
+          right: (integer_literal))))))
 
 ==================
 Array index with literal
@@ -43,13 +41,12 @@ x := buffer[0];
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (identifier)
-        expression: (index_expression
-            array: (identifier)
-            index: (integer_literal))
-)))
+      identifier: (identifier)
+      expression: (index_expression
+        array: (identifier)
+        index: (integer_literal)))))
 
 ==================
 Multi dimensional array index comma
@@ -60,14 +57,13 @@ m[i, j] := 0;
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (index_expression
-            array: (identifier)
-            index: (identifier)
-            index: (identifier))
-        expression: (integer_literal)
-)))
+      identifier: (index_expression
+        array: (identifier)
+        index: (identifier)
+        index: (identifier))
+      expression: (integer_literal))))
 
 ==================
 Multi dimensional array index chained
@@ -78,15 +74,14 @@ m[i][j] := 0;
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (index_expression
-            array: (index_expression
-                array: (identifier)
-                index: (identifier))
-            index: (identifier))
-        expression: (integer_literal)
-)))
+      identifier: (index_expression
+        array: (index_expression
+          array: (identifier)
+          index: (identifier))
+        index: (identifier))
+      expression: (integer_literal))))
 
 ==================
 Qualified array index
@@ -97,15 +92,14 @@ obj.items[i] := 0;
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (index_expression
-            array: (qualified_identifier
-                (identifier)
-                (identifier))
-            index: (identifier))
-        expression: (integer_literal)
-)))
+      identifier: (index_expression
+        array: (qualified_identifier
+          (identifier)
+          (identifier))
+        index: (identifier))
+      expression: (integer_literal))))
 
 ==================
 Array index as function argument
@@ -116,20 +110,19 @@ result := max(buffer[i], buffer[j]);
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (identifier)
-        expression: (function_call
-            name: (identifier)
-            (param_assignment
-                (index_expression
-                    array: (identifier)
-                    index: (identifier)))
-            (param_assignment
-                (index_expression
-                    array: (identifier)
-                    index: (identifier))))
-)))
+      identifier: (identifier)
+      expression: (function_call
+        name: (identifier)
+        (param_assignment
+          (index_expression
+            array: (identifier)
+            index: (identifier)))
+        (param_assignment
+          (index_expression
+            array: (identifier)
+            index: (identifier)))))))
 
 ==================
 Array index in for loop body
@@ -142,21 +135,20 @@ end_for;
 ---
 
 (source
-    (block
+  (block
     (for_statement
-        variable: (identifier)
-        start: (integer_literal)
-        end: (integer_literal)
-        body: (block
-            (assignment
-                identifier: (index_expression
-                    array: (identifier)
-                    index: (identifier))
-                expression: (binary_operator
-                    left: (index_expression
-                        array: (identifier)
-                        index: (binary_operator
-                            left: (identifier)
-                            right: (integer_literal)))
-                    right: (integer_literal))))
-)))
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal)
+      body: (block
+        (assignment
+          identifier: (index_expression
+            array: (identifier)
+            index: (identifier))
+          expression: (binary_operator
+            left: (index_expression
+              array: (identifier)
+              index: (binary_operator
+                left: (identifier)
+                right: (integer_literal)))
+            right: (integer_literal)))))))

@@ -10,14 +10,16 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body 
-            (case_item
-                label: (case_label (case_label_single (integer_literal)))
-                body: (block (noop))            
-            )))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal)))
+          body: (block
+            (noop)))))))
 
 ==================
 Single sequence case
@@ -31,15 +33,18 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body
-            (case_item
-                label: (case_label (case_label_single (integer_literal))
-                        (case_label_single (integer_literal)))
-                body: (block (noop))            
-            )))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal))
+            (case_label_single
+              (integer_literal)))
+          body: (block
+            (noop)))))))
 
 ==================
 Single range case
@@ -53,14 +58,17 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body
-            (case_item
-                label: (case_label (case_label_range (integer_literal) (integer_literal)))
-                body: (block (noop))            
-            )))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_range
+              (integer_literal)
+              (integer_literal)))
+          body: (block
+            (noop)))))))
 
 ==================
 Single combined case
@@ -74,15 +82,19 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body
-            (case_item
-                label: (case_label (case_label_single (integer_literal))
-                        (case_label_range (integer_literal) (integer_literal)))
-                body: (block (noop))            
-            )))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal))
+            (case_label_range
+              (integer_literal)
+              (integer_literal)))
+          body: (block
+            (noop)))))))
 
 ==================
 Single variable case
@@ -96,14 +108,16 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body 
-            (case_item
-                label: (case_label (case_label_single (identifier)))
-                body: (block (noop))            
-            )))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (identifier)))
+          body: (block
+            (noop)))))))
 
 ==================
 Else case
@@ -119,15 +133,18 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body 
-            (case_item
-                label: (case_label (case_label_single (integer_literal)))
-                body: (block (noop))            
-            ))
-        else: (block (noop)))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal)))
+          body: (block
+            (noop))))
+      else: (block
+        (noop)))))
 
 ==================
 Combined identifiers case
@@ -143,20 +160,28 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (identifier)
-        body: (case_body
-            (case_item
-                label: (case_label (case_label_range (identifier) (identifier))
-                        (case_label_single (identifier)))
-                body: (block (noop))            
-            )
-            (case_item
-                label: (case_label (case_label_single (identifier))
-                        (case_label_range (identifier) (identifier)))
-                body: (block (noop))            
-            )))))
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_range
+              (identifier)
+              (identifier))
+            (case_label_single
+              (identifier)))
+          body: (block
+            (noop)))
+        (case_item
+          label: (case_label
+            (case_label_single
+              (identifier))
+            (case_label_range
+              (identifier)
+              (identifier)))
+          body: (block
+            (noop)))))))
 
 ==================
 Expression value
@@ -170,15 +195,17 @@ end_case;
 ---
 
 (source
-    (block
+  (block
     (case_statement
-        value: (binary_operator
-            left: (identifier)
-            right: (binary_operator
-              left: (identifier)
-              right: (integer_literal)))
-        body: (case_body 
-            (case_item
-                label: (case_label (case_label_single (integer_literal)))
-                body: (block (noop))            
-            )))))
+      value: (binary_operator
+        left: (identifier)
+        right: (binary_operator
+          left: (identifier)
+          right: (integer_literal)))
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal)))
+          body: (block
+            (noop)))))))

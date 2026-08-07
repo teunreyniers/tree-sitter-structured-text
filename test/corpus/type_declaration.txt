@@ -32,35 +32,43 @@ END_TYPE
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         (pragma)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 TYPE with STRUCT no attributes
@@ -82,10 +90,96 @@ END_TYPE
     definition: (struct_definition
       (struct_field
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (struct_field
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
+
+==================
+Struct field with initial value
+==================
+
+TYPE analog_udt :
+STRUCT
+	value_max: REAL := 100.0;
+END_STRUCT
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    name: (identifier)
+    definition: (struct_definition
+      (struct_field
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (float_literal)))))
+
+==================
+Struct field with initial value and pragma
+==================
+
+TYPE analog_udt :
+STRUCT
+	/// Operation mode of the module
+	{attribute 'symbol' := 'readwrite'}
+	mode: USINT := 1;
+	value: REAL;
+END_STRUCT
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    name: (identifier)
+    definition: (struct_definition
+      (comment)
+      (struct_field
+        (pragma)
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (integer_literal))
+      (struct_field
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
+
+==================
+Struct field with typed literal initial value
+==================
+
+TYPE interlock_udt :
+STRUCT
+	linked_events: DWORD := DWORD#0;
+	reset_required: BOOL := FALSE;
+END_STRUCT
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    name: (identifier)
+    definition: (struct_definition
+      (struct_field
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (typed_literal
+          type: (literal_type)
+          value: (integer_literal)))
+      (struct_field
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (false)))))

@@ -1,0 +1,128 @@
+==================
+String literal
+==================
+
+var := 'hello';
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (string_literal))))
+
+==================
+Empty string literal
+==================
+
+var := '';
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (string_literal))))
+
+==================
+String literal as function argument
+==================
+
+ASSERT_EQUAL(EXPECTED := '', ACTUAL := text_udt.value);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        (string_literal))
+      (param_assignment
+        (identifier)
+        (qualified_identifier
+          (identifier)
+          (identifier))))))
+
+==================
+String literal with escape
+==================
+
+var := 'it$'s here';
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (string_literal))))
+
+==================
+String literal keeps spaces
+==================
+
+var := '  padded  ';
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (string_literal))))
+
+==================
+Double quoted wstring literal
+==================
+
+var := "wide";
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (string_literal))))
+
+==================
+String literal as initial value
+==================
+
+FUNCTION_BLOCK test
+VAR
+	label: STRING := 'idle';
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (string_literal)))))
+
+==================
+String literal comparison
+==================
+
+matched := name = 'pump';
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (equality_operator
+        left: (identifier)
+        right: (string_literal)))))

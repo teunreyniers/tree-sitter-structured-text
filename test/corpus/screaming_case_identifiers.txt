@@ -1,0 +1,104 @@
+==================
+Constant containing _TO_ is an identifier
+==================
+
+motor.discordance_code := DISCORDANCE_CODE_FAILED_TO_START;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (qualified_identifier
+        (identifier)
+        (identifier))
+      expression: (identifier))))
+
+==================
+Constant containing _TO_ as a case label
+==================
+
+CASE state OF
+	STATE_FAILED_TO_START:
+		a := 1;
+END_CASE;
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (identifier)))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Conversion is parsed as a call
+==================
+
+time_val := UDINT_TO_TIME(5000);
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (function_call
+        name: (identifier)
+        (param_assignment
+          (integer_literal))))))
+
+==================
+Conversion of a qualified identifier
+==================
+
+pt := UDINT_TO_TIME(motor.discordance_time_static);
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (function_call
+        name: (identifier)
+        (param_assignment
+          (qualified_identifier
+            (identifier)
+            (identifier)))))))
+
+==================
+Constant containing _TO_ as a variable name
+==================
+
+FUNCTION_BLOCK test
+VAR
+	STEPS_TO_GO: INT;
+END_VAR
+	STEPS_TO_GO := STEPS_TO_GO - 1;
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))
+    body: (block
+      (assignment
+        identifier: (identifier)
+        expression: (binary_operator
+          left: (identifier)
+          right: (integer_literal))))))

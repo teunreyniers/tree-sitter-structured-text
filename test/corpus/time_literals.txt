@@ -13,11 +13,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -35,11 +37,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -57,11 +61,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -79,11 +85,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -101,11 +109,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -123,11 +133,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -145,11 +157,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -167,7 +181,8 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     body: (block
       (assignment
         identifier: (identifier)
@@ -196,11 +211,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -218,11 +235,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -240,11 +259,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -262,11 +283,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -284,11 +307,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -306,11 +331,13 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -328,9 +355,11 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))

@@ -1,0 +1,236 @@
+==================
+IF without trailing semicolon
+==================
+
+IF a THEN
+	b := 1;
+END_IF
+c := 2;
+
+---
+
+(source
+  (block
+    (if_statement
+      condition: (identifier)
+      consequence: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))))
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+IF with trailing semicolon
+==================
+
+IF a THEN
+	b := 1;
+END_IF;
+c := 2;
+
+---
+
+(source
+  (block
+    (if_statement
+      condition: (identifier)
+      consequence: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))))
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+IF without trailing semicolon at end of block
+==================
+
+FUNCTION_BLOCK test
+IF NOT api.do_request THEN
+	api.success := FALSE;
+END_IF
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    body: (block
+      (if_statement
+        condition: (unary_expression
+          (qualified_identifier
+            (identifier)
+            (identifier)))
+        consequence: (block
+          (assignment
+            identifier: (qualified_identifier
+              (identifier)
+              (identifier))
+            expression: (false)))))))
+
+==================
+CASE without trailing semicolon
+==================
+
+CASE x OF
+	1:
+		a := 1;
+END_CASE
+b := 2;
+
+---
+
+(source
+  (block
+    (case_statement
+      value: (identifier)
+      body: (case_body
+        (case_item
+          label: (case_label
+            (case_label_single
+              (integer_literal)))
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+FOR without trailing semicolon
+==================
+
+FOR i := 0 TO 10 DO
+	a := i;
+END_FOR
+b := 2;
+
+---
+
+(source
+  (block
+    (for_statement
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal)
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (identifier))))
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+WHILE without trailing semicolon
+==================
+
+WHILE a DO
+	b := 1;
+END_WHILE
+c := 2;
+
+---
+
+(source
+  (block
+    (while_statement
+      condition: (identifier)
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal))))
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+REPEAT without trailing semicolon
+==================
+
+REPEAT
+	b := 1;
+UNTIL a
+END_REPEAT
+c := 2;
+
+---
+
+(source
+  (block
+    (repeat_statement
+      body: (block
+        (assignment
+          identifier: (identifier)
+          expression: (integer_literal)))
+      condition: (identifier))
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+Nested IF without trailing semicolons
+==================
+
+IF a THEN
+	IF b THEN
+		c := 1;
+	END_IF
+END_IF
+
+---
+
+(source
+  (block
+    (if_statement
+      condition: (identifier)
+      consequence: (block
+        (if_statement
+          condition: (identifier)
+          consequence: (block
+            (assignment
+              identifier: (identifier)
+              expression: (integer_literal))))))))
+
+==================
+Empty statement is still a noop
+==================
+
+a := 1;
+;
+b := 2;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))
+    (noop)
+    (assignment
+      identifier: (identifier)
+      expression: (integer_literal))))
+
+==================
+Simple statement still requires a semicolon
+==================
+
+a := 1
+b := 2;
+
+---
+
+(source
+  (block
+    (assignment
+      (identifier)
+      (integer_literal))
+    (ERROR
+      (UNEXPECTED ' ')
+      (integer_literal))))

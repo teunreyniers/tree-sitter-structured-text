@@ -7,17 +7,15 @@ x(hello := 0 , y => y);
 ---
 
 (source
-    (block
-    (fb_invocation 
-            (identifier) 
-            (param_assignment 
-             (identifier)
-             (integer_literal))
-            (param_assignment 
-             (identifier)
-             (identifier))
-    )))
-
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        (integer_literal))
+      (param_assignment
+        (identifier)
+        target: (identifier)))))
 
 ==================
 Function block return statement
@@ -28,7 +26,7 @@ RETURN;
 ---
 
 (source
-    (block
+  (block
     (return)))
 
 ==================
@@ -40,5 +38,114 @@ RETURN y;
 ---
 
 (source
-    (block
-    (return (identifier))))
+  (block
+    (return
+      (identifier))))
+
+==================
+Output parameter bound to a qualified identifier
+==================
+
+wago_ai_process_channel(
+	raw := channel_1,
+	position => wago_ai_2channel.position1,
+	fault => wago_ai_2channel.position1_fault
+);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        (identifier))
+      (param_assignment
+        (identifier)
+        target: (qualified_identifier
+          (identifier)
+          (identifier)))
+      (param_assignment
+        (identifier)
+        target: (qualified_identifier
+          (identifier)
+          (identifier))))))
+
+==================
+Output parameter bound to an array element
+==================
+
+fb(Q => buffer[0]);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        target: (index_expression
+          array: (identifier)
+          index: (integer_literal))))))
+
+==================
+Negated output parameter bound to a qualified identifier
+==================
+
+fb(NOT Q => module.state);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        target: (qualified_identifier
+          (identifier)
+          (identifier))))))
+
+==================
+Trailing comma in parameter list
+==================
+
+pulse_r_trig(
+	CLK := pulse_button.pulse_ui,
+	Q => pulse_button.pulse,
+);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        (qualified_identifier
+          (identifier)
+          (identifier)))
+      (param_assignment
+        (identifier)
+        target: (qualified_identifier
+          (identifier)
+          (identifier))))))
+
+==================
+Trailing comma with a single parameter
+==================
+
+fb(CLK := a,);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        (identifier)))))

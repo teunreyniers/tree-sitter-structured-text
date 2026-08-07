@@ -34,29 +34,38 @@ END_FUNCTION_BLOCK
     var_section: (var_in_out
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     var_section: (var_output)
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     var_section: (var_temp
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     body: (block
       (pragma)
       (assignment
         identifier: (identifier)
         expression: (comparison_operator
-          left: (qualified_identifier (identifier) (identifier))
-          right: (qualified_identifier (identifier) (identifier))))
+          left: (qualified_identifier
+            (identifier)
+            (identifier))
+          right: (qualified_identifier
+            (identifier)
+            (identifier))))
       (pragma))))
 
 ==================
@@ -79,21 +88,25 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var_input
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     body: (block
       (assignment
         identifier: (identifier)
         expression: (binary_operator
           left: (identifier)
           right: (identifier)))
-      (return (identifier)))))
+      (return
+        (identifier)))))
 
 ==================
 Program declaration
@@ -116,7 +129,8 @@ END_PROGRAM
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     body: (block
       (assignment
         identifier: (identifier)
@@ -142,17 +156,20 @@ END_FUNCTION
 (source
   (function_declaration
     name: (identifier)
-    return_type: (type_name (identifier))
+    return_type: (type_name
+      (identifier))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     body: (block
       (assignment
         identifier: (identifier)
-        expression: (type_conversion
-          type: (conversion_type)
-          value: (integer_literal))))))
+        expression: (function_call
+          name: (identifier)
+          (param_assignment
+            (integer_literal)))))))
 
 ==================
 Array variable declarations
@@ -176,7 +193,8 @@ END_FUNCTION_BLOCK
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
       (variable_declaration
         name: (identifier)
         type: (type_name
@@ -184,7 +202,8 @@ END_FUNCTION_BLOCK
             range: (array_range
               start: (integer_literal)
               end: (identifier))
-            element_type: (type_name (identifier)))))
+            element_type: (type_name
+              (identifier)))))
       (variable_declaration
         name: (identifier)
         type: (type_name
@@ -192,7 +211,8 @@ END_FUNCTION_BLOCK
             range: (array_range
               start: (integer_literal)
               end: (identifier))
-            element_type: (type_name (identifier)))))
+            element_type: (type_name
+              (identifier)))))
       (variable_declaration
         name: (identifier)
         type: (type_name
@@ -200,7 +220,8 @@ END_FUNCTION_BLOCK
             range: (array_range
               start: (integer_literal)
               end: (identifier))
-            element_type: (type_name (identifier)))))
+            element_type: (type_name
+              (identifier)))))
       (variable_declaration
         name: (identifier)
         type: (type_name
@@ -208,4 +229,5 @@ END_FUNCTION_BLOCK
             range: (array_range
               start: (integer_literal)
               end: (identifier))
-            element_type: (type_name (identifier))))))))
+            element_type: (type_name
+              (identifier))))))))

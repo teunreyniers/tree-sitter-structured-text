@@ -8,12 +8,11 @@ var := expr;
 ---
 
 (source
-    (comment)
-    (block
+  (comment)
+  (block
     (assignment
-        identifier: (identifier)
-        expression: (identifier)
-)))
+      identifier: (identifier)
+      expression: (identifier))))
 
 ==================
 Inline comment
@@ -24,12 +23,11 @@ var := (* inline comment *) expr;
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (identifier)
-        (comment)
-        expression: (identifier)
-)))
+      identifier: (identifier)
+      (comment)
+      expression: (identifier))))
 
 ==================
 Multiline comment
@@ -44,12 +42,11 @@ var := expr;
 ---
 
 (source
-    (comment)
-    (block
+  (comment)
+  (block
     (assignment
-        identifier: (identifier)
-        expression: (identifier)
-)))
+      identifier: (identifier)
+      expression: (identifier))))
 
 ==================
 Comment
@@ -63,9 +60,9 @@ Comment
 ---
 
 (source
-      (comment)
-      (block
-        (noop)))
+  (comment)
+  (block
+    (noop)))
 
 ==================
 Multiple block comments
@@ -90,18 +87,21 @@ END_FUNCTION_BLOCK
   (function_block_declaration
     name: (identifier)
     var_section: (var
+      (comment)
       (variable_declaration
-        (comment)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
+      (comment)
       (variable_declaration
-        (comment)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
+      (comment)
       (variable_declaration
-        (comment)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 Block comment with asterisks inside

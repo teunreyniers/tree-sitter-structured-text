@@ -1,0 +1,254 @@
+==================
+Typed literal with decimal value
+==================
+
+var := DINT#0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (typed_literal
+        type: (literal_type)
+        value: (integer_literal)))))
+
+==================
+Typed literal with hex value
+==================
+
+var := WORD#16#FFF0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (typed_literal
+        type: (literal_type)
+        value: (integer_literal)))))
+
+==================
+Typed literal with real value
+==================
+
+var := REAL#0.0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (typed_literal
+        type: (literal_type)
+        value: (float_literal)))))
+
+==================
+Typed literal with boolean value
+==================
+
+var := BOOL#TRUE;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (typed_literal
+        type: (literal_type)
+        value: (true)))))
+
+==================
+Typed literal lowercase type
+==================
+
+var := dword#0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (typed_literal
+        type: (literal_type)
+        value: (integer_literal)))))
+
+==================
+Typed literal in a comparison
+==================
+
+interlocked := (a AND NOT b) <> DWORD#0;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (equality_operator
+        left: (parenthesized_expression
+          (boolean_operator
+            left: (identifier)
+            right: (unary_expression
+              (identifier))))
+        right: (typed_literal
+          type: (literal_type)
+          value: (integer_literal))))))
+
+==================
+Typed literal as function argument
+==================
+
+linked := linked OR SHL(DWORD#1, index);
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (boolean_operator
+        left: (identifier)
+        right: (function_call
+          name: (identifier)
+          (param_assignment
+            (typed_literal
+              type: (literal_type)
+              value: (integer_literal)))
+          (param_assignment
+            (identifier)))))))
+
+==================
+Typed literal as initial value
+==================
+
+FUNCTION_BLOCK test
+VAR
+	linked_events: DWORD := DWORD#0;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (typed_literal
+          type: (literal_type)
+          value: (integer_literal))))))
+
+==================
+Typed literal compared to an array element
+==================
+
+all_zero := constants[0] = WORD#16#0000;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (equality_operator
+        left: (index_expression
+          array: (identifier)
+          index: (integer_literal))
+        right: (typed_literal
+          type: (literal_type)
+          value: (integer_literal))))))
+
+==================
+Date literal
+==================
+
+fb(current_date := D#2026-07-31);
+
+---
+
+(source
+  (block
+    (fb_invocation
+      (identifier)
+      (param_assignment
+        (identifier)
+        (date_literal)))))
+
+==================
+Date literal long form
+==================
+
+var := DATE#2026-07-31;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (date_literal))))
+
+==================
+Time of day literal
+==================
+
+var := TOD#12:30:00.5;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (time_of_day_literal))))
+
+==================
+Date and time literal
+==================
+
+var := DT#2026-07-31-12:30:00;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (date_and_time_literal))))
+
+==================
+TIME literal long prefix
+==================
+
+var := TIME#100ms;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (time_literal))))
+
+==================
+Identifier is not mistaken for a typed literal
+==================
+
+var := DWORD;
+
+---
+
+(source
+  (block
+    (assignment
+      identifier: (identifier)
+      expression: (identifier))))

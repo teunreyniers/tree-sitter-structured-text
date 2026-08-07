@@ -27,12 +27,67 @@ const PREC = {
 
 const SEMICOLON = ";";
 
+// Elementary types that may prefix a typed literal, e.g. `WORD#16#FFF0`.
+// TIME/LTIME and the date types are handled by their own literal rules.
+const ELEMENTARY_TYPES = [
+  "BOOL",
+  "BYTE",
+  "WORD",
+  "DWORD",
+  "LWORD",
+  "SINT",
+  "INT",
+  "DINT",
+  "LINT",
+  "USINT",
+  "UINT",
+  "UDINT",
+  "ULINT",
+  "REAL",
+  "LREAL",
+  "STRING",
+  "WSTRING",
+  "CHAR",
+  "WCHAR",
+];
+
 /**
  * @param {string} keyword
  * @param {boolean} aliasAsWord
  */
 function caseInsensitive(keyword, aliasAsWord = true) {
   return alias(choice(keyword, keyword.toUpperCase()), keyword);
+}
+
+/**
+ * A literal token prefix in either case, e.g. `bothCases("dt")` matches
+ * `dt` and `DT` but not `Dt`. Mixed case is not used in practice.
+ * @param {string} keyword
+ */
+function bothCases(keyword) {
+  return choice(keyword.toLowerCase(), keyword.toUpperCase());
+}
+
+/**
+ * Comma separated parameter list allowing a trailing comma.
+ * @param {any} param
+ */
+function parameterList(param) {
+  return optional(seq(param, repeat(seq(",", param)), optional(",")));
+}
+
+/**
+ * A `VAR…END_VAR` section with an optional qualifier.
+ * @param {any} $
+ * @param {string} keyword
+ */
+function varSection($, keyword) {
+  return seq(
+    caseInsensitive(keyword),
+    optional(field("qualifier", $.var_qualifier)),
+    repeat($.variable_declaration),
+    caseInsensitive("end_var")
+  );
 }
 
 export default grammar({
@@ -44,11 +99,25 @@ export default grammar({
 
   rules: {
     source: ($) => choice(
-      repeat1(choice($.function_block_declaration, $.function_declaration, $.program_declaration, $.type_declaration)),
+      repeat1(choice($.function_block_declaration, $.test_function_block_declaration, $.function_declaration, $.program_declaration, $.type_declaration)),
       $.block
     ),
 
-    block: ($) => repeat1(choice(seq($._statement, ";"), $.noop, $.pragma)),
+    // A simple statement is always terminated by `;`. After a compound
+    // statement the terminator is optional, which is what most vendors accept
+    // and what the sources in the wild rely on (`END_IF` on its own line).
+    block: ($) =>
+      repeat1(
+        choice(
+          seq($._simple_statement, SEMICOLON),
+          $._terminated_compound_statement,
+          $.noop,
+          $.pragma
+        )
+      ),
+
+    _terminated_compound_statement: ($) =>
+      prec.right(seq($._compound_statement, optional(SEMICOLON))),
 
     // Program organization units
     function_block_declaration: ($) =>
@@ -58,6 +127,17 @@ export default grammar({
         repeat(field("var_section", $._var_section)),
         field("body", optional($.block)),
         caseInsensitive("end_function_block")
+      ),
+
+    // Unit-test POU as used by ST test frameworks. Body is identical to a
+    // regular function block.
+    test_function_block_declaration: ($) =>
+      seq(
+        caseInsensitive("test_function_block"),
+        field("name", $.identifier),
+        repeat(field("var_section", $._var_section)),
+        field("body", optional($.block)),
+        caseInsensitive("end_test_function_block")
       ),
 
     function_declaration: ($) =>
@@ -101,6 +181,7 @@ export default grammar({
         field("name", $.identifier),
         ":",
         field("type", $.type_name),
+        optional(seq(":=", field("initial_value", $._expression))),
         ";"
       ),
 
@@ -115,77 +196,36 @@ export default grammar({
         $.var_temp,
         $.var_static,
         $.var_global,
-        $.var_external,
-        $.var_constant
+        $.var_external
       ),
 
-    var_input: ($) =>
-      seq(
-        caseInsensitive("var_input"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
+    // CONSTANT / RETAIN / NON_RETAIN / PERSISTENT may follow any section
+    // keyword, and may be combined (`VAR RETAIN PERSISTENT`).
+    var_qualifier: (_) =>
+      repeat1(
+        choice(
+          caseInsensitive("constant"),
+          caseInsensitive("retain"),
+          caseInsensitive("non_retain"),
+          caseInsensitive("persistent")
+        )
       ),
 
-    var_output: ($) =>
-      seq(
-        caseInsensitive("var_output"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
+    var_input: ($) => varSection($, "var_input"),
+    var_output: ($) => varSection($, "var_output"),
+    var_in_out: ($) => varSection($, "var_in_out"),
+    var: ($) => varSection($, "var"),
+    var_temp: ($) => varSection($, "var_temp"),
+    var_static: ($) => varSection($, "var_static"),
+    var_global: ($) => varSection($, "var_global"),
+    var_external: ($) => varSection($, "var_external"),
 
-    var_in_out: ($) =>
-      seq(
-        caseInsensitive("var_in_out"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
-    var: ($) =>
-      seq(
-        caseInsensitive("var"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
-    var_temp: ($) =>
-      seq(
-        caseInsensitive("var_temp"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
-    var_static: ($) =>
-      seq(
-        caseInsensitive("var_static"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
-    var_global: ($) =>
-      seq(
-        caseInsensitive("var_global"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
-    var_external: ($) =>
-      seq(
-        caseInsensitive("var_external"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
-    var_constant: ($) =>
-      seq(
-        caseInsensitive("var"),
-        caseInsensitive("constant"),
-        repeat($.variable_declaration),
-        caseInsensitive("end_var")
-      ),
-
+    // Comments are `extras`, so they must not be listed here: a comment
+    // between the last declaration and END_VAR would otherwise be shifted
+    // into a declaration that can never be completed.
     variable_declaration: ($) =>
       seq(
-        repeat(choice($.comment, $.pragma)),
+        repeat($.pragma),
         field("name", $.identifier),
         ":",
         field("type", $.type_name),
@@ -211,9 +251,42 @@ export default grammar({
 
     array_range: ($) =>
       seq(
-        field("start", choice($.integer_literal, $.identifier)),
+        field("start", $._array_bound),
         "..",
-        field("end", choice($.integer_literal, $.identifier))
+        field("end", $._array_bound)
+      ),
+
+    // Bounds are a restricted expression rather than `_expression`: a float
+    // is never a valid bound, and admitting `float_literal` here would make
+    // the lexer read the `0.` of `0..MAX` as a float.
+    _array_bound: ($) =>
+      choice(
+        $.integer_literal,
+        $.identifier,
+        $.qualified_identifier,
+        $.array_bound_expression
+      ),
+
+    array_bound_expression: ($) =>
+      choice(
+        prec.left(
+          PREC.add,
+          seq(
+            field("left", $._array_bound),
+            field("operator", choice("+", "-")),
+            field("right", $._array_bound)
+          )
+        ),
+        prec.left(
+          PREC.multiply,
+          seq(
+            field("left", $._array_bound),
+            field("operator", choice("*", "/", caseInsensitive("mod"))),
+            field("right", $._array_bound)
+          )
+        ),
+        prec(PREC.unary, seq("-", field("operand", $._array_bound))),
+        prec(PREC.parenthesized_expression, seq("(", $._array_bound, ")"))
       ),
 
     // Expression
@@ -231,24 +304,36 @@ export default grammar({
         $.index_expression,
         $.float_literal,
         $.integer_literal,
+        $.string_literal,
         $.time_literal,
+        $.date_literal,
+        $.time_of_day_literal,
+        $.date_and_time_literal,
+        $.typed_literal,
         $.true,
-        $.false,
-        $.type_conversion
+        $.false
       ),
 
     function_call: ($) =>
       seq(
         field("name", $.identifier),
         "(",
-        seq(optional($.param_assignment), repeat(seq(",", $.param_assignment))),
+        parameterList($.param_assignment),
         ")"
       ),
 
     param_assignment: ($) =>
       choice(
         seq(optional(seq($.identifier, ":=")), $._expression),
-        seq(optional(caseInsensitive("not")), $.identifier, "=>", $.identifier)
+        seq(
+          optional(caseInsensitive("not")),
+          $.identifier,
+          "=>",
+          field(
+            "target",
+            choice($.identifier, $.qualified_identifier, $.index_expression)
+          )
+        )
       ),
 
     true: (_) => choice("TRUE", "true", "True"),
@@ -259,15 +344,31 @@ export default grammar({
 
     unary_expression: ($) => choice(prec(PREC.unary, seq("-", $._expression)), prec(PREC.unary, seq(caseInsensitive("not"), $._expression))),
 
-    type_conversion: ($) =>
+    // Typed literal, e.g. `WORD#16#FFF0`, `DINT#0`, `REAL#0.0`.
+    // The `#` is part of the prefix token so that it always outranks
+    // `identifier`, which would otherwise win the longest-match tie.
+    typed_literal: ($) =>
       seq(
-        field("type", $.conversion_type),
-        "(",
-        field("value", $._expression),
-        ")"
+        field("type", $.literal_type),
+        field(
+          "value",
+          choice(
+            $.float_literal,
+            $.integer_literal,
+            $.string_literal,
+            $.true,
+            $.false
+          )
+        )
       ),
 
-    conversion_type: (_) => token(/[A-Z_]+_TO_[A-Z_]+/),
+    literal_type: (_) =>
+      token(
+        seq(
+          choice(...ELEMENTARY_TYPES.map((type) => bothCases(type))),
+          "#"
+        )
+      ),
 
     binary_operator: ($) =>
       choice(
@@ -371,15 +472,85 @@ export default grammar({
       );
     },
 
-    string_literal: ($) => seq("'", /[^']*/, "'"),
+    // Single quoted STRING and double quoted WSTRING, both allowing the IEC
+    // `$` escape. Must be a single token so that `extras` cannot be inserted
+    // between the quotes.
+    string_literal: (_) =>
+      token(
+        choice(
+          seq("'", repeat(choice(/[^'$]/, seq("$", /./))), "'"),
+          seq('"', repeat(choice(/[^"$]/, seq("$", /./))), '"')
+        )
+      ),
+
+    date_literal: (_) => {
+      const digits = repeat1(/[0-9]/);
+
+      return token(
+        seq(
+          seq(choice(bothCases("date"), bothCases("d")), "#"),
+          digits,
+          "-",
+          digits,
+          "-",
+          digits
+        )
+      );
+    },
+
+    time_of_day_literal: (_) => {
+      const digits = repeat1(/[0-9]/);
+
+      return token(
+        seq(
+          seq(choice(bothCases("time_of_day"), bothCases("tod")), "#"),
+          digits,
+          ":",
+          digits,
+          ":",
+          digits,
+          optional(seq(".", digits))
+        )
+      );
+    },
+
+    date_and_time_literal: (_) => {
+      const digits = repeat1(/[0-9]/);
+
+      return token(
+        seq(
+          seq(choice(bothCases("date_and_time"), bothCases("dt")), "#"),
+          digits,
+          "-",
+          digits,
+          "-",
+          digits,
+          "-",
+          digits,
+          ":",
+          digits,
+          ":",
+          digits,
+          optional(seq(".", digits))
+        )
+      );
+    },
 
     time_literal: (_) => {
       const digits = repeat1(/[0-9]/);
       const decimal_digits = seq(digits, optional(seq(".", digits)));
-      
+
       return token(
         seq(
-          /[tT]#/,
+          seq(
+            choice(
+              bothCases("ltime"),
+              bothCases("time"),
+              bothCases("lt"),
+              bothCases("t")
+            ),
+            "#"
+          ),
           choice(
             // Milliseconds as smallest unit
             seq(decimal_digits, /[mM][sS]/),
@@ -418,13 +589,17 @@ export default grammar({
 
     noop: (_) => SEMICOLON,
 
-    _statement: ($) =>
+    _compound_statement: ($) =>
       choice(
         $.case_statement,
         $.if_statement,
         $.for_statement,
         $.while_statement,
-        $.repeat_statement,
+        $.repeat_statement
+      ),
+
+    _simple_statement: ($) =>
+      choice(
         $.assignment,
         $.fb_invocation,
         $.return,
@@ -439,18 +614,19 @@ export default grammar({
     continue: (_) => caseInsensitive("continue"),
 
     fb_invocation: ($) =>
-      seq(
-        $.identifier,
-        "(",
-        seq(optional($.param_assignment), repeat(seq(",", $.param_assignment))),
-        ")"
-      ),
+      seq($.identifier, "(", parameterList($.param_assignment), ")"),
 
     // Variables
     identifier: (_) => /[_a-zA-Z][_a-zA-Z0-9]*/,
 
+    // A member may be an integer to address a single bit, e.g. `input.0`.
     qualified_identifier: ($) =>
-      seq($.identifier, repeat1(seq(".", $.identifier))),
+      seq(
+        $.identifier,
+        repeat1(seq(".", choice($.identifier, $.bit_selector)))
+      ),
+
+    bit_selector: (_) => /[0-9]+/,
 
     index_expression: ($) =>
       seq(

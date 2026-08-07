@@ -9,14 +9,13 @@ end_for;
 ---
 
 (source
-    (block
+  (block
     (for_statement
-        variable: (identifier)
-        start: (integer_literal)
-        end: (integer_literal)
-        body: (block
-            (noop))
-)))
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal)
+      body: (block
+        (noop)))))
 
 ==================
 For statement with by
@@ -29,15 +28,14 @@ end_for;
 ---
 
 (source
-    (block
+  (block
     (for_statement
-        variable: (identifier)
-        start: (integer_literal)
-        end: (integer_literal)
-        by: (integer_literal)
-        body: (block
-            (noop))
-)))
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal)
+      by: (integer_literal)
+      body: (block
+        (noop)))))
 
 ==================
 For statement with expression bounds
@@ -50,17 +48,16 @@ end_for;
 ---
 
 (source
-    (block
+  (block
     (for_statement
-        variable: (identifier)
-        start: (identifier)
-        end: (binary_operator
-            left: (identifier)
-            right: (integer_literal))
-        by: (identifier)
-        body: (block
-            (noop))
-)))
+      variable: (identifier)
+      start: (identifier)
+      end: (binary_operator
+        left: (identifier)
+        right: (integer_literal))
+      by: (identifier)
+      body: (block
+        (noop)))))
 
 ==================
 For statement with qualified variable
@@ -73,16 +70,15 @@ end_for;
 ---
 
 (source
-    (block
+  (block
     (for_statement
-        variable: (qualified_identifier
-            (identifier)
-            (identifier))
-        start: (integer_literal)
-        end: (integer_literal)
-        body: (block
-            (noop))
-)))
+      variable: (qualified_identifier
+        (identifier)
+        (identifier))
+      start: (integer_literal)
+      end: (integer_literal)
+      body: (block
+        (noop)))))
 
 ==================
 While statement
@@ -95,14 +91,13 @@ end_while;
 ---
 
 (source
-    (block
+  (block
     (while_statement
-        condition: (comparison_operator
-            left: (identifier)
-            right: (identifier))
-        body: (block
-            (noop))
-)))
+      condition: (comparison_operator
+        left: (identifier)
+        right: (identifier))
+      body: (block
+        (noop)))))
 
 ==================
 Repeat statement
@@ -116,14 +111,13 @@ end_repeat;
 ---
 
 (source
-    (block
+  (block
     (repeat_statement
-        body: (block
-            (noop))
-        condition: (comparison_operator
-            left: (identifier)
-            right: (identifier))
-)))
+      body: (block
+        (noop))
+      condition: (comparison_operator
+        left: (identifier)
+        right: (identifier)))))
 
 ==================
 Exit and continue
@@ -137,13 +131,12 @@ end_while;
 ---
 
 (source
-    (block
+  (block
     (while_statement
-        condition: (true)
-        body: (block
-            (exit)
-            (continue))
-)))
+      condition: (true)
+      body: (block
+        (exit)
+        (continue)))))
 
 ==================
 Nested for in while
@@ -158,21 +151,20 @@ end_while;
 ---
 
 (source
-    (block
+  (block
     (while_statement
-        condition: (identifier)
-        body: (block
-            (for_statement
-                variable: (identifier)
-                start: (integer_literal)
-                end: (integer_literal)
-                body: (block
-                    (assignment
-                        identifier: (identifier)
-                        expression: (binary_operator
-                            left: (identifier)
-                            right: (identifier))))))
-)))
+      condition: (identifier)
+      body: (block
+        (for_statement
+          variable: (identifier)
+          start: (integer_literal)
+          end: (integer_literal)
+          body: (block
+            (assignment
+              identifier: (identifier)
+              expression: (binary_operator
+                left: (identifier)
+                right: (identifier)))))))))
 
 ==================
 Repeat containing if
@@ -188,15 +180,14 @@ end_repeat;
 ---
 
 (source
-    (block
+  (block
     (repeat_statement
-        body: (block
-            (if_statement
-                condition: (identifier)
-                consequence: (block
-                    (exit))))
-        condition: (identifier)
-)))
+      body: (block
+        (if_statement
+          condition: (identifier)
+          consequence: (block
+            (exit))))
+      condition: (identifier))))
 
 ==================
 For upper case
@@ -209,15 +200,14 @@ END_FOR;
 ---
 
 (source
-    (block
+  (block
     (for_statement
-        variable: (identifier)
-        start: (integer_literal)
-        end: (integer_literal)
-        by: (integer_literal)
-        body: (block
-            (continue))
-)))
+      variable: (identifier)
+      start: (integer_literal)
+      end: (integer_literal)
+      by: (integer_literal)
+      body: (block
+        (continue)))))
 
 ==================
 While upper case
@@ -230,12 +220,11 @@ END_WHILE;
 ---
 
 (source
-    (block
+  (block
     (while_statement
-        condition: (identifier)
-        body: (block
-            (exit))
-)))
+      condition: (identifier)
+      body: (block
+        (exit)))))
 
 ==================
 Repeat upper case
@@ -249,9 +238,8 @@ END_REPEAT;
 ---
 
 (source
-    (block
+  (block
     (repeat_statement
-        body: (block
-            (noop))
-        condition: (identifier)
-)))
+      body: (block
+        (noop))
+      condition: (identifier))))

@@ -1,0 +1,131 @@
+==================
+VAR RETAIN section
+==================
+
+FUNCTION_BLOCK test
+VAR RETAIN
+	_integral: REAL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      qualifier: (var_qualifier)
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
+
+==================
+VAR PERSISTENT section
+==================
+
+FUNCTION_BLOCK test
+VAR PERSISTENT
+	counter: UDINT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      qualifier: (var_qualifier)
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
+
+==================
+VAR NON_RETAIN section
+==================
+
+FUNCTION_BLOCK test
+VAR NON_RETAIN
+	scratch: INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      qualifier: (var_qualifier)
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
+
+==================
+VAR RETAIN PERSISTENT section
+==================
+
+FUNCTION_BLOCK test
+VAR RETAIN PERSISTENT
+	total: LREAL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      qualifier: (var_qualifier)
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
+
+==================
+VAR_INPUT with qualifier
+==================
+
+FUNCTION_BLOCK test
+VAR_INPUT RETAIN
+	setpoint: REAL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var_input
+      qualifier: (var_qualifier)
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))
+
+==================
+Lowercase qualifier
+==================
+
+FUNCTION_BLOCK test
+var retain
+	a: INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      qualifier: (var_qualifier)
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))))))

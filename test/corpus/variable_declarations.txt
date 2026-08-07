@@ -18,7 +18,8 @@ END_FUNCTION_BLOCK
       (variable_declaration
         (pragma)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 Variable with comment and pragma
@@ -38,11 +39,12 @@ END_FUNCTION_BLOCK
   (function_block_declaration
     name: (identifier)
     var_section: (var
+      (comment)
       (variable_declaration
-        (comment)
         (pragma)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 Variable with block comment
@@ -63,12 +65,13 @@ END_FUNCTION_BLOCK
   (function_block_declaration
     name: (identifier)
     var_section: (var
+      (comment)
+      (comment)
       (variable_declaration
-        (comment)
-        (comment)
         (pragma)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 Variable with initial value and pragma
@@ -90,8 +93,10 @@ END_FUNCTION_BLOCK
       (variable_declaration
         (pragma)
         name: (identifier)
-        type: (type_name (identifier))
-        initial_value: (unary_expression (integer_literal))))))
+        type: (type_name
+          (identifier))
+        initial_value: (unary_expression
+          (integer_literal))))))
 
 ==================
 Multiple variables with pragmas and comments
@@ -121,13 +126,15 @@ END_FUNCTION_BLOCK
         (pragma)
         (comment)
         name: (identifier)
-        type: (type_name (identifier)))
+        type: (type_name
+          (identifier)))
+      (comment)
+      (comment)
       (variable_declaration
-        (comment)
-        (comment)
         (pragma)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 VAR CONSTANT section
@@ -146,15 +153,18 @@ END_FUNCTION_BLOCK
 (source
   (function_block_declaration
     name: (identifier)
-    var_section: (var_constant
+    var_section: (var
+      qualifier: (var_qualifier)
+      (comment)
       (variable_declaration
-        (comment)
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (integer_literal))
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (integer_literal)))))
 
 ==================
@@ -178,11 +188,13 @@ END_FUNCTION_BLOCK
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))
+        type: (type_name
+          (identifier))))
     var_section: (var
       (variable_declaration
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
 
 ==================
 Variable with array type and pragma
@@ -202,8 +214,8 @@ END_FUNCTION_BLOCK
   (function_block_declaration
     name: (identifier)
     var_section: (var
+      (comment)
       (variable_declaration
-        (comment)
         (pragma)
         name: (identifier)
         type: (type_name
@@ -211,7 +223,8 @@ END_FUNCTION_BLOCK
             range: (array_range
               start: (integer_literal)
               end: (identifier))
-            element_type: (type_name (identifier))))))))
+            element_type: (type_name
+              (identifier))))))))
 
 ==================
 Variable with TIME literal
@@ -230,10 +243,11 @@ END_FUNCTION_BLOCK
   (function_block_declaration
     name: (identifier)
     var_section: (var
+      (comment)
       (variable_declaration
-        (comment)
         name: (identifier)
-        type: (type_name (identifier))
+        type: (type_name
+          (identifier))
         initial_value: (time_literal)))))
 
 ==================
@@ -253,7 +267,155 @@ END_FUNCTION_BLOCK
   (function_block_declaration
     name: (identifier)
     var_section: (var
+      (comment)
       (variable_declaration
-        (comment)
         name: (identifier)
-        type: (type_name (identifier))))))
+        type: (type_name
+          (identifier))))))
+
+==================
+Trailing comment before END_VAR
+==================
+
+FUNCTION_BLOCK test
+VAR
+	delta_time: UINT := 20;  // Cycle time in milliseconds
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier))
+        initial_value: (integer_literal))
+      (comment))))
+
+==================
+Own line comment before END_VAR
+==================
+
+FUNCTION_BLOCK test
+VAR
+	a: UINT;
+	// nothing follows this
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier)))
+      (comment))))
+
+==================
+Block comment before END_VAR
+==================
+
+FUNCTION_BLOCK test
+VAR
+	a: UINT; (* trailing note *)
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (identifier)))
+      (comment))))
+
+==================
+Comment before END_VAR in an empty section
+==================
+
+FUNCTION_BLOCK test
+VAR
+	// nothing here yet
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (comment))))
+
+==================
+Array bound expression
+==================
+
+FUNCTION_BLOCK test
+VAR
+	device_available: ARRAY [0..MAX_DEVICES - 1] OF BOOL;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (integer_literal)
+              end: (array_bound_expression
+                left: (identifier)
+                right: (integer_literal)))
+            element_type: (type_name
+              (identifier))))))))
+
+==================
+Array bound expression on both ends
+==================
+
+FUNCTION_BLOCK test
+VAR
+	grid: ARRAY [BASE + 1..(MAX * 2) - 1] OF INT;
+END_VAR
+END_FUNCTION_BLOCK
+
+---
+
+(source
+  (function_block_declaration
+    name: (identifier)
+    var_section: (var
+      (variable_declaration
+        name: (identifier)
+        type: (type_name
+          (array_type
+            range: (array_range
+              start: (array_bound_expression
+                left: (identifier)
+                right: (integer_literal))
+              end: (array_bound_expression
+                left: (array_bound_expression
+                  (array_bound_expression
+                    left: (identifier)
+                    right: (integer_literal)))
+                right: (integer_literal)))
+            element_type: (type_name
+              (identifier))))))))

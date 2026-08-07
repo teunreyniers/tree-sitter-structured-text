@@ -6,9 +6,11 @@
 (function_declaration name: (identifier) @function)
 (function_block_declaration name: (identifier) @function)
 (program_declaration name: (identifier) @function)
+(test_function_block_declaration name: (identifier) @function)
 
-; Type conversion
-(conversion_type) @function.builtin
+; Type conversion, e.g. UDINT_TO_TIME(x)
+((function_call name: (identifier) @function.builtin)
+  (#match? @function.builtin "^[A-Z][A-Z0-9_]*_TO_[A-Z][A-Z0-9_]*$"))
 
 ; Variables
 (identifier) @variable
@@ -22,7 +24,16 @@
   (integer_literal)
   (float_literal)
   (time_literal)
+  (date_literal)
+  (time_of_day_literal)
+  (date_and_time_literal)
 ] @number
+
+(bit_selector) @number
+
+(string_literal) @string
+
+(typed_literal (literal_type) @type.builtin)
 
 [
   (true)
@@ -44,6 +55,8 @@
   "end_function"
   "program"
   "end_program"
+  "test_function_block"
+  "end_test_function_block"
   "type"
   "end_type"
   "struct"
@@ -60,6 +73,9 @@
   "var_global"
   "var_external"
   "constant"
+  "retain"
+  "non_retain"
+  "persistent"
   "end_var"
 ] @keyword
 

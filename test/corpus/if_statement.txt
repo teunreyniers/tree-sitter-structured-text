@@ -9,12 +9,11 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
-        condition: (true)
-        consequence: (block
-            (noop))
-)))
+      condition: (true)
+      consequence: (block
+        (noop)))))
 
 ==================
 If else statement
@@ -29,15 +28,14 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
-        condition: (identifier)
-        consequence: (block
-            (noop))
-        alternative: (else_clause
-          body: (block
-            (noop)))
-)))
+      condition: (identifier)
+      consequence: (block
+        (noop))
+      alternative: (else_clause
+        body: (block
+          (noop))))))
 
 ==================
 If elsif statement
@@ -52,16 +50,15 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
+      condition: (identifier)
+      consequence: (block
+        (noop))
+      alternative: (elsif_clause
         condition: (identifier)
         consequence: (block
-            (noop))
-        alternative: (elsif_clause
-            condition: (identifier)
-            consequence: (block
-            (noop)))
-)))
+          (noop))))))
 
 ==================
 If elsif else statement
@@ -78,19 +75,18 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
+      condition: (identifier)
+      consequence: (block
+        (noop))
+      alternative: (elsif_clause
         condition: (identifier)
         consequence: (block
-            (noop))
-        alternative: (elsif_clause
-            condition: (identifier)
-            consequence: (block
-            (noop)))
-        alternative: (else_clause
-          body: (block
-            (noop)))
-)))
+          (noop)))
+      alternative: (else_clause
+        body: (block
+          (noop))))))
 
 ==================
 If 3x elsif else statement
@@ -111,27 +107,26 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
+      condition: (identifier)
+      consequence: (block
+        (noop))
+      alternative: (elsif_clause
         condition: (identifier)
         consequence: (block
-            (noop))
-        alternative: (elsif_clause
-            condition: (identifier)
-            consequence: (block
-            (noop)))
-        alternative: (elsif_clause
-            condition: (identifier)
-            consequence: (block
-            (noop)))
-        alternative: (elsif_clause
-            condition: (identifier)
-            consequence: (block
-            (noop)))
-        alternative: (else_clause
-          body: (block
-            (noop)))
-)))
+          (noop)))
+      alternative: (elsif_clause
+        condition: (identifier)
+        consequence: (block
+          (noop)))
+      alternative: (elsif_clause
+        condition: (identifier)
+        consequence: (block
+          (noop)))
+      alternative: (else_clause
+        body: (block
+          (noop))))))
 
 ==================
 Nested if statement
@@ -146,15 +141,14 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
-        condition: (identifier)
-        consequence: (block
-             (if_statement
-            condition: (identifier)
-            consequence: (block
-                (noop)))
-))))
+      condition: (identifier)
+      consequence: (block
+        (if_statement
+          condition: (identifier)
+          consequence: (block
+            (noop)))))))
 
 ==================
 If case
@@ -171,16 +165,15 @@ end_if;
 ---
 
 (source
-    (block
+  (block
     (if_statement
-        condition: (true)
+      condition: (true)
+      consequence: (block
+        (noop))
+      alternative: (elsif_clause
+        condition: (identifier)
         consequence: (block
-            (noop))
-        alternative: (elsif_clause
-            condition: (identifier)
-            consequence: (block
-            (noop)))
-        alternative: (else_clause
-          body: (block
-            (noop)))
-)))
+          (noop)))
+      alternative: (else_clause
+        body: (block
+          (noop))))))

@@ -7,8 +7,7 @@ var := expr;
 ---
 
 (source
-    (block
+  (block
     (assignment
-        identifier: (identifier)
-        expression: (identifier)
-)))
+      identifier: (identifier)
+      expression: (identifier))))
