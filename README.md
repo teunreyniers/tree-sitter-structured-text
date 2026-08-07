@@ -83,6 +83,7 @@ Declarations may be located with `AT %IX0.0`, and initialised with an array init
 - Line comments `// ...` and block comments `(* ... *)`, in any position including immediately before `END_VAR`
 - Pragmas / attributes `{ ... }` before variable declarations, struct fields, and whole declarations
 - Syntax highlighting queries in [`queries/highlights.scm`](queries/highlights.scm)
+- Auto-indentation queries in [`queries/indents.scm`](queries/indents.scm) — see [Editor integration](#editor-integration)
 
 ## Installation
 
@@ -136,6 +137,99 @@ go get github.com/teunreyniers/tree-sitter-structured-text
 ```
 
 Bindings for C and Swift are also generated under [`bindings/`](bindings/).
+
+## Editor integration
+
+Two query files ship with the grammar. Copy them where your editor looks for
+`structured_text` queries, or let your plugin manager install the grammar.
+
+| File | Purpose |
+|---|---|
+| [`queries/highlights.scm`](queries/highlights.scm) | Syntax highlighting |
+| [`queries/indents.scm`](queries/indents.scm) | Auto-indentation, 4 spaces per level |
+
+### Indentation
+
+`indents.scm` is written against [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)'s
+indent captures (`@indent.begin`, `@indent.branch`, `@indent.end`,
+`@indent.auto`). Enable it per buffer with:
+
+```lua
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+```
+
+Neovim only re-runs the indent expression on the keys listed in `indentkeys`,
+which by default does not include ST's terminators, so a line does not step back
+out until something else triggers a reindent. Add the words you want to snap back
+as you type them. Use the `=~` form rather than `=`: it ignores case, which is
+what a case-insensitive language needs.
+
+```lua
+vim.bo.indentkeys = vim.bo.indentkeys
+  .. ',=~end_if,=~end_case,=~end_for,=~end_while,=~end_repeat'
+  .. ',=~end_var,=~end_struct,=~else,=~elsif,=~until'
+```
+
+The indent model is the one the [st-fmt](https://github.com/teunreyniers/st-fmt)
+formatter enforces, so typing and saving agree rather than fighting:
+**containers stay flat, leaf contents indent.** A `VAR` section, a `METHOD` and a
+POU's statement body all sit at their parent's column, and only the declarations,
+struct fields and statements inside them move in a level. Control flow is the
+opposite: `IF`, `CASE`, `FOR`, `WHILE` and `REPEAT` each indent their body, and
+their `ELSE`, `ELSIF`, `UNTIL` and `END_*` lines step back out. `PROPERTY` and
+`ACTION` are the two exceptions among POU members — a property wraps its
+accessors and an action is a fragment of the enclosing POU, so both indent their
+contents.
+
+```
+FUNCTION_BLOCK FB_Motor
+VAR_INPUT
+    bStart : BOOL;
+END_VAR
+
+IF bStart THEN
+    nState := 1;
+ELSIF bStop THEN
+    nState := 0;
+END_IF
+
+CASE nState OF
+    0:
+        y := 1;
+ELSE
+    y := 0;
+END_CASE
+
+METHOD Run : BOOL
+Run := TRUE;
+END_METHOD
+
+PROPERTY Speed : REAL
+    GET
+        Speed := 1.0;
+    END_GET
+END_PROPERTY
+
+ACTION Reset
+    nState := 0;
+END_ACTION
+
+END_FUNCTION_BLOCK
+```
+
+Two limitations are worth knowing. The interior of a multi-line block comment is
+left to `autoindent`, because the formatter copies block comments byte for byte
+and the ASCII tables in PLC headers must survive. And while a block is still
+unterminated the parser inside a POU collapses the file into one `ERROR` node
+with no structure left to read; the query recovers the indent from the trailing
+keyword (`THEN`, `DO`, `OF`, `VAR`, …), so the first line of a new body is
+correct, but lines after that stay where you put them until the terminator is
+typed.
+
+**Helix** uses a different and smaller capture set — `@indent`, `@outdent` and
+`@extend`, with no equivalent of `@indent.end` — and anchors on a different node,
+so one file cannot serve both editors well. `indents.scm` here targets
+nvim-treesitter; a Helix version belongs under a Helix runtime directory.
 
 ## Development
 
