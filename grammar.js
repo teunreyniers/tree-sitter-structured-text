@@ -382,19 +382,25 @@ export default grammar({
         caseInsensitive("end_type")
       ),
 
-    // A struct, an enumeration, or an alias for any other type — which covers
-    // the subrange (`INT (0..100)`) and array (`ARRAY[0..9] OF INT`) forms.
+    // A struct, a union, an enumeration, or an alias for any other type —
+    // which covers the subrange (`INT (0..100)`) and array
+    // (`ARRAY[0..9] OF INT`) forms.
     type_definition: ($) =>
       seq(
         field("name", $.identifier),
         ":",
         field(
           "definition",
-          choice($.struct_definition, $.enum_definition, $.type_name)
+          choice(
+            $.struct_definition,
+            $.union_definition,
+            $.enum_definition,
+            $.type_name
+          )
         ),
         optional(seq(":=", field("initial_value", $._initial_value))),
         // Vendors terminate the definition with `;` after an enumeration or an
-        // alias but not always after `END_STRUCT`.
+        // alias but not always after `END_STRUCT`/`END_UNION`.
         optional(";")
       ),
 
@@ -421,6 +427,24 @@ export default grammar({
         ":",
         field("type", $.type_name),
         optional(seq(":=", field("initial_value", $._initial_value))),
+        ";"
+      ),
+
+    // Members of a UNION overlay the same memory, so unlike a struct field
+    // they take neither an `AT` location nor an initial value.
+    union_definition: ($) =>
+      seq(
+        caseInsensitive("union"),
+        repeat($.union_field),
+        caseInsensitive("end_union")
+      ),
+
+    union_field: ($) =>
+      seq(
+        repeat($.pragma),
+        field("name", $.identifier),
+        ":",
+        field("type", $.type_name),
         ";"
       ),
 

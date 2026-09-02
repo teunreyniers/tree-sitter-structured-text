@@ -188,3 +188,30 @@ END_TYPE
           type: (type_name
             (identifier))
           initial_value: (false))))))
+
+==================
+TYPE with UNION
+==================
+
+TYPE
+dword_real_union : UNION
+    bits  : DWORD;
+    value : REAL;
+END_UNION
+END_TYPE
+
+---
+
+(source
+  (type_declaration
+    (type_definition
+      name: (identifier)
+      definition: (union_definition
+        (union_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))
+        (union_field
+          name: (identifier)
+          type: (type_name
+            (identifier)))))))
