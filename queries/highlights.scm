@@ -111,6 +111,8 @@
   "end_type"
   "struct"
   "end_struct"
+  "union"
+  "end_union"
   "pointer"
   "reference"
   "to"

@@ -4861,6 +4861,10 @@
           {
             "type": "type_name",
             "named": true
+          },
+          {
+            "type": "union_definition",
+            "named": true
           }
         ]
       },
@@ -5149,6 +5153,57 @@
         },
         {
           "type": "unary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "union_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "union_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "union_field",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "pragma",
           "named": true
         }
       ]
@@ -5913,6 +5968,10 @@
     "named": false
   },
   {
+    "type": "end_union",
+    "named": false
+  },
+  {
     "type": "end_var",
     "named": false
   },
@@ -6114,6 +6173,10 @@
   },
   {
     "type": "type",
+    "named": false
+  },
+  {
+    "type": "union",
     "named": false
   },
   {

@@ -115,6 +115,9 @@
 ; `Point : STRUCT`, `END_STRUCT` and `END_TYPE` all share the `TYPE` column.
 (struct_definition) @indent.begin
 
+; Same shape as STRUCT, but for UNION.
+(union_definition) @indent.begin
+
 ; An enumeration written one member per line.
 (enum_definition) @indent.begin
 
@@ -266,6 +269,7 @@
   "end_repeat"
   "end_var"
   "end_struct"
+  "end_union"
   "end_type"
   "end_method"
   "end_property"
@@ -296,6 +300,7 @@
   "end_repeat"
   "end_var"
   "end_struct"
+  "end_union"
   "end_property"
   "end_get"
   "end_set"
@@ -344,6 +349,7 @@
     "repeat"
     "else"
     "struct"
+    "union"
     "get"
     "set"
   ] @indent.begin)

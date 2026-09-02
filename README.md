@@ -13,7 +13,7 @@ Recognised file extensions: `.st`, `.iec`, `.scl`
 - `PROGRAM` / `END_PROGRAM`
 - `CLASS` / `END_CLASS` and `INTERFACE` / `END_INTERFACE`
 - `TEST_FUNCTION_BLOCK` / `END_TEST_FUNCTION_BLOCK`, as used by ST unit-test frameworks
-- `TYPE` / `END_TYPE` holding one or more definitions: `STRUCT`, enumerations, aliases, subranges and array types, each with optional initial values
+- `TYPE` / `END_TYPE` holding one or more definitions: `STRUCT`, `UNION`, enumerations, aliases, subranges and array types, each with optional initial values
 
 **Object orientation**
 
@@ -167,7 +167,7 @@ what a case-insensitive language needs.
 ```lua
 vim.bo.indentkeys = vim.bo.indentkeys
   .. ',=~end_if,=~end_case,=~end_for,=~end_while,=~end_repeat'
-  .. ',=~end_var,=~end_struct,=~else,=~elsif,=~until'
+  .. ',=~end_var,=~end_struct,=~end_union,=~else,=~elsif,=~until'
 ```
 
 The indent model is the one the [st-fmt](https://github.com/teunreyniers/st-fmt)
